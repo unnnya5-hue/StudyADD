@@ -2046,7 +2046,7 @@ function showSummary() {
 }
 $('#summaryCard').addEventListener('click', (e) => {
   const t = e.target;
-  if (t.dataset.open) { $('#summary').classList.remove('on'); openTab(t.dataset.open); }
+  if (t.dataset.open) { $('#summary').classList.remove('on'); addBackButton(); openTab(t.dataset.open); }
   else if (t.dataset.dl) download(t.dataset.dl);
   else if (t.id === 'openApp') {
     const url = URL.createObjectURL(new Blob([buildAppHtml()], { type: 'text/html' }));
