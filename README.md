@@ -28,14 +28,11 @@
 
 ## GitHub Pages で公開する手順
 
-1. GitHub で新しいリポジトリを作成（例：`ai-dev-demo`）
-2. このリポジトリを push
-   ```sh
-   git remote add origin https://github.com/<ユーザー名>/ai-dev-demo.git
-   git push -u origin snailfish:main
-   ```
-3. GitHub のリポジトリ画面 → **Settings → Pages**
-4. 「Build and deployment」の Source を **Deploy from a branch**、Branch を **main / (root)** にして Save
-5. 1〜2分後に `https://<ユーザー名>.github.io/ai-dev-demo/` で開けるようになります
+リポジトリ：https://github.com/unnnya5-hue/StudyADD
 
-※ GitHub Pages の公開URLは誰でも閲覧できます（無料プランではリポジトリもPublicにする必要があります）。社外秘の情報は含めないでください。
+1. GitHub のリポジトリ画面 → **Settings → Pages**
+2. 「Build and deployment」の Source を **Deploy from a branch** にする
+3. Branch で **build-offline-ai-dev**、フォルダは **/ (root)** を選んで Save
+4. 1〜2分後に **https://unnnya5-hue.github.io/StudyADD/** で開けるようになります
+
+※ GitHub Pages の公開URLは誰でも閲覧できます（無料プランではリポジトリも Public である必要があります）。社外秘の情報は含めないでください。
