@@ -569,8 +569,8 @@ const HTML_SRC = `<!DOCTYPE html>
   <main class="app">
     <h1>✅ チームTODO</h1>
 
-    <!-- 入力フォーム（FR-01） -->
-    <form id="task-form" class="task-form">
+    <!-- 入力フォーム（FR-01）。入力チェックは app.js で行う（FR-02） -->
+    <form id="task-form" class="task-form" novalidate>
       <input id="task-title" type="text" placeholder="タスク名を入力" maxlength="100">
       <input id="task-due" type="date" aria-label="期限">
       <button id="add-btn" type="submit">追加</button>
@@ -1420,15 +1420,21 @@ const A = {
     cursor.style.transform = 'translate(' + curX + 'px,' + curY + 'px)';
     await sleep(520);
   },
-  async click(el) {
+  // 見た目だけのクリック（カーソル移動＋波紋）。入力欄はこれだけにして、実際のクリックはしない。
+  // ※ Safari系(WebKit)では日付入力欄を click() すると入力途中扱いになり、以後フォーム送信が止まるため
+  async tap(el) {
     await A.move(el);
     const rip = cursor.querySelector('.rip');
     rip.classList.remove('go'); void rip.offsetWidth; rip.classList.add('go');
+  },
+  async click(el) {
+    await A.tap(el);
     el.click();
     await sleep(420);
   },
   async type(el, text) {
-    await A.click(el);
+    await A.tap(el);
+    await sleep(200);
     el.value = '';
     for (const ch of text) {
       el.value += ch;
@@ -1438,13 +1444,15 @@ const A = {
     await sleep(200);
   },
   async clear(el) {
-    await A.click(el);
+    await A.tap(el);
+    await sleep(200);
     el.value = '';
     el.dispatchEvent(new Event('input', { bubbles: true }));
     await sleep(250);
   },
   async date(el, v) {
-    await A.click(el);
+    await A.tap(el);
+    await sleep(200);
     el.value = v;
     el.dispatchEvent(new Event('input', { bubbles: true }));
     el.dispatchEvent(new Event('change', { bubbles: true }));
