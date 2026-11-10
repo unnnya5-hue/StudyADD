@@ -794,25 +794,26 @@ const TEST_MD = `# テスト仕様書：チームTODO
 - 要件定義書の機能要件（FR-01〜FR-09）を**すべて1件以上のテストケースで確認**する
 - 正常系に加え、入力チェックなどの**異常系**も確認する
 - テストケースは上から順に実施する（前のケースの結果を引き継ぐ）
+- 不具合を修正した場合は**全件を再実施（回帰テスト）**し、結果を「2回目」列に記入する
 
 ## 2. テスト環境
 - ブラウザ：Chrome 最新版
 - 初期状態：タスク0件（保存データを削除してから開始）
 
 ## 3. テストケース
-| No | 要件 | テスト項目 | 手順 | 期待結果 | 結果 |
-|---|---|---|---|---|---|
-| TC-01 | FR-01, FR-03 | タスク登録 | タスク名に「議事録を作成する」と入力し［追加］を押す | 一覧の先頭に「議事録を作成する」が表示される | 未実施 |
-| TC-02 | FR-01 | 期限付きで登録 | 「週次報告書を提出」と期限（1週間後）を入力し［追加］を押す | 一覧の先頭に表示され、期限が表示される | 未実施 |
-| TC-03 | FR-04 | 完了切替 | 「議事録を作成する」のチェックボックスをONにする | 取り消し線付きで表示される | 未実施 |
-| TC-04 | FR-06 | 絞り込み（未完了） | ［未完了］を押す | 未完了のタスクだけが表示される | 未実施 |
-| TC-05 | FR-06 | 絞り込み（完了） | ［完了］を押す | 完了済みのタスクだけが表示される | 未実施 |
-| TC-06 | FR-05 | 削除 | ［すべて］を押し、「削除テスト用」を登録して、その［削除］を押す | 「削除テスト用」が一覧から消える | 未実施 |
-| TC-07 | FR-08 | 期限切れ表示 | 「経費精算」と期限（3日前）を入力し［追加］を押す | 期限が赤字で強調表示される | 未実施 |
-| TC-08 | FR-07 | 件数表示 | 一覧下の件数表示を確認する | 「未完了: 2件 / 全3件」と表示される | 未実施 |
-| TC-09 | FR-02 | 未入力チェック | タスク名を空のまま［追加］を押す | エラーメッセージが表示され、タスクは登録されない | 未実施 |
-| TC-10 | FR-02 | 空白のみチェック | タスク名にスペースのみ入力して［追加］を押す | エラーメッセージが表示され、タスクは登録されない | 未実施 |
-| TC-11 | FR-09 | データ保持 | 画面を再読み込みする | 再読み込み前と同じタスクが表示される | 未実施 |
+| No | 要件 | テスト項目 | 手順 | 期待結果 | 1回目 | 2回目 |
+|---|---|---|---|---|---|---|
+| TC-01 | FR-01, FR-03 | タスク登録 | タスク名に「議事録を作成する」と入力し［追加］を押す | 一覧の先頭に「議事録を作成する」が表示される | 未実施 | 未実施 |
+| TC-02 | FR-01 | 期限付きで登録 | 「週次報告書を提出」と期限（1週間後）を入力し［追加］を押す | 一覧の先頭に表示され、期限が表示される | 未実施 | 未実施 |
+| TC-03 | FR-04 | 完了切替 | 「議事録を作成する」のチェックボックスをONにする | 取り消し線付きで表示される | 未実施 | 未実施 |
+| TC-04 | FR-06 | 絞り込み（未完了） | ［未完了］を押す | 未完了のタスクだけが表示される | 未実施 | 未実施 |
+| TC-05 | FR-06 | 絞り込み（完了） | ［完了］を押す | 完了済みのタスクだけが表示される | 未実施 | 未実施 |
+| TC-06 | FR-05 | 削除 | ［すべて］を押し、「削除テスト用」を登録して、その［削除］を押す | 「削除テスト用」が一覧から消える | 未実施 | 未実施 |
+| TC-07 | FR-08 | 期限切れ表示 | 「経費精算」と期限（3日前）を入力し［追加］を押す | 期限が赤字で強調表示される | 未実施 | 未実施 |
+| TC-08 | FR-07 | 件数表示 | 一覧下の件数表示を確認する | 「未完了: 2件 / 全3件」と表示される | 未実施 | 未実施 |
+| TC-09 | FR-02 | 未入力チェック | タスク名を空のまま［追加］を押す | エラーメッセージが表示され、タスクは登録されない | 未実施 | 未実施 |
+| TC-10 | FR-02 | 空白のみチェック | タスク名にスペースのみ入力して［追加］を押す | エラーメッセージが表示され、タスクは登録されない | 未実施 | 未実施 |
+| TC-11 | FR-09 | データ保持 | 画面を再読み込みする | 再読み込み前と同じタスクが表示される | 未実施 | 未実施 |
 
 ## 4. 実施記録
 | 回 | 実施日 | 結果 | 備考 |
@@ -943,8 +944,9 @@ function md(src) {
         if (!cells.length) return;
         const tag = ri === 0 ? 'th' : 'td';
         const id = cells[0].trim();
-        const last = cells[cells.length - 1].trim();
-        const cls = last === '実行中' ? ' class="running"' : last === 'NG' ? ' class="ng"' : '';
+        const st = cells.map((c) => c.trim());
+        const r2 = st[st.length - 1], r1 = st[st.length - 2];
+        const cls = st.includes('実行中') ? ' class="running"' : (r2 === 'NG' || (r2 === '未実施' && r1 === 'NG')) ? ' class="ng"' : '';
         t += '<tr data-id="' + esc(id) + '"' + cls + '>' + cells.map((c) => '<' + tag + '>' + (tag === 'td' ? cellHtml(c) : inlineMd(c.trim())) + '</' + tag + '>').join('') + '</tr>';
       });
       h += t + '</table>';
@@ -1425,9 +1427,15 @@ const TESTS = [
   } },
 ];
 
-function setResult(id, val) {
+// col: 0 = 1回目, 1 = 2回目
+function setResult(id, val, col) {
   const f = S.files['docs/test-spec.md'];
-  f.content = f.content.split('\n').map((l) => l.startsWith('| ' + id + ' ') ? l.replace(/\| [^|]*\|$/, '| ' + val + ' |') : l).join('\n');
+  f.content = f.content.split('\n').map((l) => {
+    if (!l.startsWith('| ' + id + ' ')) return l;
+    const cells = l.split('|');
+    cells[cells.length - 3 + col] = ' ' + val + ' ';
+    return cells.join('|');
+  }).join('\n');
   if (S.active === 'docs/test-spec.md') {
     renderEditor(false);
     const row = $('#editor tr[data-id="' + id + '"]');
@@ -1435,14 +1443,13 @@ function setResult(id, val) {
   }
 }
 
-async function runTests(label) {
+async function runTests(label, col) {
   S.skip = false; // 打鍵テストは見せ場なので、直前のスキップはここで止める
   S.mdMode['docs/test-spec.md'] = 'view';
   openTab('docs/test-spec.md');
   const ed = $('#editor');
   const tbl = ed.querySelectorAll('h2')[2];
   if (tbl) ed.scrollTop = tbl.offsetTop - 50;
-  TESTS.forEach((t) => setResult(t.id, '未実施'));
   term('ai-test run docs/test-spec.md --browser chrome   # ' + label, 'cmd');
   term('保存データを削除して初期状態から開始します', 'dim');
   clearAppData();
@@ -1456,10 +1463,10 @@ async function runTests(label) {
   await sleep(400);
   const results = [];
   for (const t of TESTS) {
-    setResult(t.id, '実行中');
+    setResult(t.id, '実行中', col);
     let r;
     try { r = await t.run(); } catch (e) { r = { ok: false, actual: '実行エラー: ' + e.message }; }
-    setResult(t.id, r.ok ? 'OK' : 'NG');
+    setResult(t.id, r.ok ? 'OK' : 'NG', col);
     if (r.ok) term('✔ ' + t.id + ' ' + t.name + ' … OK', 'ok');
     else { term('✖ ' + t.id + ' ' + t.name + ' … NG', 'ng'); term('    実際の結果: ' + r.actual, 'ng'); }
     results.push({ ...t, ...r });
@@ -1704,7 +1711,7 @@ async function main() {
   divider('フェーズ5：打鍵テスト');
   await ai('テスト仕様書の手順どおりに、ブラウザを操作してテストします。');
   const tt = tool('Browser', 'docs/test-spec.md（11件）');
-  S.firstRun = await runTests('1回目');
+  S.firstRun = await runTests('1回目', 0);
   tt.done('OK ' + S.firstRun.ok + ' / NG ' + S.firstRun.ng, S.firstRun.ng > 0);
   const ngIds = S.firstRun.results.filter((r) => !r.ok).map((r) => r.id);
   appendRecord('| 1回目 | ' + TODAY_JP + ' | OK ' + S.firstRun.ok + '件 / NG ' + S.firstRun.ng + '件 | ' + (ngIds.length ? ngIds.join('、') + ' がNG。タスク名の入力チェック漏れ' : '全件合格') + ' |');
@@ -1762,11 +1769,11 @@ async function main() {
   await rv4.approve();
   await ai('承認ありがとうございます。**全11件の回帰テスト**を実行します。');
   const tt2 = tool('Browser', 'docs/test-spec.md（11件・回帰テスト）');
-  S.secondRun = await runTests('2回目（回帰テスト）');
+  S.secondRun = await runTests('2回目（回帰テスト）', 1);
   tt2.done('OK ' + S.secondRun.ok + ' / NG ' + S.secondRun.ng, S.secondRun.ng > 0);
   appendRecord('| 2回目 | ' + TODAY_JP + ' | OK ' + S.secondRun.ok + '件 / NG ' + S.secondRun.ng + '件 | ' + (S.secondRun.ng ? '要確認' : 'FR-02 修正後の回帰テスト。全件合格') + ' |');
   await sleep(400);
-  await ai('回帰テストが完了しました。**11件すべてOK**です 🎉\n\nテスト仕様書の「実施記録」に1回目・2回目の結果を記入しました。これで要件定義から実装・テストまで、一通り完了です。');
+  await ai('回帰テストが完了しました。**11件すべてOK**です 🎉\n\nテスト仕様書の「**2回目**」列に結果を記入しました。1回目のNGは、不具合の履歴としてそのまま残しています（「実施記録」にも記載済みです）。これで要件定義から実装・テストまで、一通り完了です。');
   await note('人間がしたのは「**伝える・答える・確認する・判断する**」だけ。手を動かす作業はAIが担当しました。');
   await choose([
     { label: '完成を確認する', text: 'ありがとう！成果物を一覧で見せてください。' },
