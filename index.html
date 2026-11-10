@@ -170,6 +170,21 @@ button{font:inherit;color:inherit}
 .plan li{padding:2px 0;color:var(--muted)}
 .plan li.doing{color:#fff}
 .plan li.done{color:var(--ok)}
+.plan.pm{border-color:rgba(122,162,247,.5)}
+.plan.pm ul{counter-reset:pm}
+.plan.pm li{counter-increment:pm;padding-left:20px;position:relative}
+.plan.pm li::before{content:counter(pm) ".";position:absolute;left:0;color:#9db8fa;font-weight:700}
+.plan .pm-t{color:var(--muted);font-size:12px;margin:2px 0 6px}
+.plan .pm-f{margin-top:6px;font-size:12px;color:var(--muted)}
+.plan .pm-f.done{color:var(--ok)}
+.tag{display:inline-block;font:700 10.5px var(--mono);letter-spacing:.02em;padding:1px 6px;border-radius:5px;background:rgba(122,162,247,.16);color:#9db8fa;border:1px solid rgba(122,162,247,.4);vertical-align:1px;margin-right:6px}
+.queue{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:8px 12px;font-size:13px}
+.queue .q-h{font-weight:700;color:var(--warn);display:flex;align-items:center;gap:8px}
+.queue .q-h .cnt{margin-left:auto;background:var(--warn);color:#111;border-radius:999px;padding:0 9px;font-size:12px}
+.queue .q-i{display:flex;gap:8px;align-items:center;padding:3px 0;color:#d9dce3}
+.queue .q-i .st{margin-left:auto;font-size:12px;color:var(--warn);white-space:nowrap}
+.queue .q-i.done .st{color:var(--ok)}
+.queue .q-f{font-size:12px;color:var(--muted);margin-top:4px}
 .review{background:#1f2128;border:1px solid #4a4f63;border-left:3px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:13px}
 .rv-h{display:flex;align-items:center;gap:8px;font-weight:700;color:#fff;margin-bottom:4px}
 .rv-h .tgt{margin-left:auto;font:11.5px var(--mono);color:var(--accent);background:none;border:1px solid #3d4250;border-radius:6px;padding:1px 7px;cursor:pointer;white-space:nowrap}
@@ -261,7 +276,7 @@ button{font:inherit;color:inherit}
 .card .actions .btn{font-size:14px;padding:9px 18px}
 .hint{color:var(--muted);font-size:12.5px;margin-top:16px}
 .kbd{font:12px var(--mono);background:var(--panel3);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:0 6px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:18px 0 22px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 22px}
 .stat{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
 .stat .v{font-size:26px;font-weight:800;color:#fff;line-height:1.2}
 .stat .v small{font-size:13px;font-weight:600;color:var(--muted);margin-left:2px}
@@ -340,6 +355,7 @@ button{font:inherit;color:inherit}
   .preview{flex:1 1 auto;border-left:0;border-top:1px solid var(--border);min-height:45%}
   .chat{height:75vh;border-left:0;border-top:1px solid var(--border)}
   .roles{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
   .card{padding:22px 18px}
   .status .hide-sm{display:none}
 }
@@ -450,26 +466,28 @@ button{font:inherit;color:inherit}
     <table class="g-tbl">
       <tr><th>工程</th><th>AIがやったこと</th><th>人間がやったこと</th><th>学び</th></tr>
       <tr><td>要件定義</td><td>不明点の質問、要件定義書の作成</td><td>目的を伝え、AIが推測で決めた点をレビュー</td><td>AIは足りない情報を推測で補う。前提を必ず確かめる</td></tr>
-      <tr><td>並列実装</td><td>2体のエージェントが分担してコーディング</td><td>作業の進め方を決める</td><td>並列化で速くなるが、エージェント同士は互いの判断を知らない</td></tr>
-      <tr><td>マージ</td><td>ブランチの統合、競合の検出</td><td>どちらの変更が要件に合っているか判断</td><td>判断の基準は「コードの出来」ではなく「要件」</td></tr>
+      <tr><td>計画・並列実装</td><td>実装計画の提示、2体のエージェントが分担してコーディング</td><td>計画を確認して承認。2体分のレビューを1人で受ける</td><td>並列化で速くなるが、エージェント同士は互いの判断を知らない。AIを増やしても判断する人間は増えない</td></tr>
+      <tr><td>マージ</td><td>ブランチの統合、競合の検出、共通ルールの文書化</td><td>どちらの変更が要件に合っているか判断し、共通ルールを決める</td><td>判断の基準は「コードの出来」ではなく「要件」。衝突は共通の土台を先に決めれば防げる</td></tr>
       <tr><td>テスト仕様書</td><td>要件からテスト観点を網羅的に作成</td><td>テストしない範囲（境界値など）を判断</td><td>テスト観点の抜けは、そのまま品質の抜けになる</td></tr>
       <tr><td>打鍵テスト</td><td>画面操作、合否判定、原因調査</td><td>結果を確認し、修正を指示</td><td>AIが書いたコードにもバグはある。動く ≠ 正しい</td></tr>
       <tr><td>修正・再テスト</td><td>修正、全件の回帰テスト</td><td>差分をレビューして承認</td><td>修正は新しいバグの種。差分レビューと回帰テストで確認</td></tr>
     </table>
 
-    <h2>うまく進めるための5つの原則</h2>
+    <h2>うまく進めるための6つの原則</h2>
     <div class="g-rules">
       <div class="g-rule"><span class="no">1</span><div><b>目的と背景を伝える</b><span>「何を作るか」だけでなく「なぜ必要か」を伝えると、AIの提案の質が上がります。</span></div></div>
       <div class="g-rule"><span class="no">2</span><div><b>要件を文書に残す</b><span>要件定義書は、AIへの指示書であり、競合や迷いが起きた時の判断の拠り所になります。</span></div></div>
-      <div class="g-rule"><span class="no">3</span><div><b>成果物は毎回レビューする</b><span>AIの「推測」「対象外にした判断」「良かれと思った独自の改善」を探すのが、レビューの勘所です。</span></div></div>
-      <div class="g-rule"><span class="no">4</span><div><b>動かして、テストで確かめる</b><span>構文チェックが通っても、要件どおりとは限りません。修正後は全件の回帰テストを行います。</span></div></div>
-      <div class="g-rule"><span class="no">5</span><div><b>最終的な責任は人間が持つ</b><span>何を作り、何を世に出すかを決めるのは人間です。AIの判断に任せきりにしません。</span></div></div>
+      <div class="g-rule"><span class="no">3</span><div><b>並列化の前に、共通の土台を決める</b><span>データの形・共通ルール・担当範囲を先に決めて全エージェントに渡すと、衝突そのものを防げます。</span></div></div>
+      <div class="g-rule"><span class="no">4</span><div><b>成果物は毎回レビューする</b><span>AIの「推測」「対象外にした判断」「良かれと思った独自の改善」を探すのが、レビューの勘所です。</span></div></div>
+      <div class="g-rule"><span class="no">5</span><div><b>動かして、テストで確かめる</b><span>構文チェックが通っても、要件どおりとは限りません。修正後は全件の回帰テストを行います。</span></div></div>
+      <div class="g-rule"><span class="no">6</span><div><b>最終的な責任は人間が持つ</b><span>何を作り、何を世に出すかを決めるのは人間です。AIの判断に任せきりにしません。</span></div></div>
     </div>
 
     <h2>⚠️ 注意しておきたいこと</h2>
     <div class="g-warn"><ul>
       <li><b>機密情報・個人情報を入力しない</b>：社内のAI利用ルールに従い、許可されたツールと範囲で使う</li>
       <li><b>もっともらしい誤りに注意</b>：AIの出力は自信ありげに見えても、間違っていることがある</li>
+      <li><b>人間の判断がボトルネックになる</b>：AIを増やすほどレビュー待ちが溜まる。並列にする数は、人が確認できる量に合わせる</li>
       <li><b>「良かれと思った改善」に注意</b>：頼んでいない変更が入っていないか、差分で確認する</li>
       <li><b>セキュリティ・ライセンスの確認</b>：生成されたコードも、人が書いたコードと同じ基準でチェックする</li>
     </ul></div>
@@ -484,6 +502,14 @@ button{font:inherit;color:inherit}
 <span class="k">【作る物】</span>ブラウザで動くTODO管理アプリの要件定義書
 <span class="k">【前提・制約】</span>サーバーなし／データ共有は不要／期限を設定したい
 <span class="k">【出力形式】</span>機能要件はID付きの表で。不明点があれば作成前に質問して</div>
+
+    <h2>もう一歩：AIを使いこなす仕組み</h2>
+    <table class="g-tbl">
+      <tr><th>仕組み</th><th>何をするものか</th><th>デモでの場面</th></tr>
+      <tr><td>Plan mode</td><td>AIはファイルを変更せず、計画だけを提示する。人間が承認してから作業に入る</td><td>要件定義のあと、実装計画を確認して承認</td></tr>
+      <tr><td>SubAgent</td><td>作業を切り出して別のAIエージェントに任せる。それぞれが独立して並列に動く</td><td>エージェントA・Bが別ブランチで分担して実装</td></tr>
+      <tr><td>Skill</td><td>手順・チェックリスト・依頼の型を手順書としてまとめ、AIが必要なときに読み込んで使い回す</td><td>毎回同じ型だった4回のレビュー依頼</td></tr>
+    </table>
 
     <div class="g-close">AIは「<b>速く作る</b>」のが得意、人間は「<b>正しく決める</b>」のが役割。<br>この分担をうまく回すことが、AI駆動開発の第一歩です。</div>
 
@@ -886,6 +912,35 @@ const B_BLOCK = A_BLOCK.replace(/  \/\/ 新しいタスクを先頭に追加[^\n
 const JS_CONFLICT = JS_V1.replace(A_BLOCK, () =>
   '<<<<<<< agent-a/task-basic（エージェントA）\n' + A_BLOCK + '=======\n' + B_BLOCK + '>>>>>>> agent-b/due-date（エージェントB）\n');
 
+const CONV_MD = `# エージェント共通ルール：チームTODO
+
+並列で実装する前に、このルールを全エージェントに渡す。
+迷ったときは要件定義書（docs/requirements.md）を優先する。
+
+## 1. データの形
+
+| 項目 | 型 | 内容 |
+|---|---|---|
+| id | 文字列 | 一意のID |
+| title | 文字列 | タスク名（100文字以内） |
+| due | 文字列 | 期限（YYYY-MM-DD）。未設定は空文字 |
+| done | 真偽値 | 完了したかどうか |
+
+## 2. 共通ルール
+
+- 一覧の並び順は **新しく登録した順**（FR-03）。変えるときは先に要件定義書を変更する
+- 保存先は localStorage のキー \`team-todo.tasks\` のみ
+- 要件にない「改善」は実装せず、提案として報告する
+
+## 3. 担当範囲
+
+| ファイル・処理 | 担当 |
+|---|---|
+| src/index.html | エージェントA |
+| src/app.js のタスク追加・並び順 | エージェントA（他は変更しない） |
+| src/app.js の期限切れ判定 | エージェントB |
+| src/style.css | 自分の担当部分のみ追記 |
+`;
 const TEST_MD = `# テスト仕様書：チームTODO
 
 | 項目 | 内容 |
@@ -1286,9 +1341,31 @@ log.addEventListener('click', (e) => {
   if (b && S.tabs.includes(b.dataset.open)) openTab(b.dataset.open);
 });
 
+/* ---------- Plan mode の計画カード ---------- */
+async function planMode(title, items) {
+  const el = addEl('plan pm', '<div class="ph"><span class="tag">Plan mode</span>' + esc(title) + '</div><div class="pm-t">計画を確認するモードです。承認されるまで、ファイルの作成・変更は行いません。</div><ul></ul>');
+  const ul = el.querySelector('ul');
+  for (const t of items) { const li = document.createElement('li'); li.innerHTML = inlineMd(t); ul.appendChild(li); scrollChat(); await sleep(260); }
+  const foot = addTo(el, 'pm-f', '⏳ 計画の承認待ち');
+  return { approve() { foot.className = 'pm-f done'; foot.textContent = '✅ 計画を承認（あなた）→ 実装を開始します'; } };
+}
+
+/* ---------- レビュー待ちキュー ---------- */
+function reviewQueue(items) {
+  const el = addEl('queue', '<div class="q-h">📥 あなたへのレビュー依頼<span class="cnt">' + items.length + '件</span></div>' +
+    items.map((t) => '<div class="q-i"><span>' + inlineMd(t) + '</span><span class="st">⏳ 確認待ち</span></div>').join('') +
+    '<div class="q-f">AIが何体いても、確認するのは<b>あなた1人</b>です。</div>');
+  return {
+    done() {
+      el.querySelectorAll('.q-i').forEach((q) => { q.classList.add('done'); q.querySelector('.st').textContent = '✅ 確認済み'; });
+      const c = el.querySelector('.cnt'); c.textContent = '0件'; c.style.background = 'var(--ok)';
+    },
+  };
+}
+
 /* ---------- エージェントカード ---------- */
 function agentCard(key, name, branch, role, steps) {
-  const el = addEl('agent', '<div class="ag-h"><span class="ag-av ' + key + '">' + key + '</span><b>' + esc(name) + '</b><code>' + esc(branch) + '</code><span class="ag-st">待機中</span></div><div class="ag-d">担当：' + esc(role) + '</div><ul>' + steps.map((t) => '<li>☐ ' + esc(t) + '</li>').join('') + '</ul><div class="ag-bar"><i></i></div>');
+  const el = addEl('agent', '<div class="ag-h"><span class="ag-av ' + key + '">' + key + '</span><span class="tag">SubAgent</span><b>' + esc(name) + '</b><code>' + esc(branch) + '</code><span class="ag-st">待機中</span></div><div class="ag-d">担当：' + esc(role) + '</div><ul>' + steps.map((t) => '<li>☐ ' + esc(t) + '</li>').join('') + '</ul><div class="ag-bar"><i></i></div>');
   const lis = el.querySelectorAll('li'), bar = el.querySelector('.ag-bar i'), st = el.querySelector('.ag-st');
   return {
     doing(i) { lis[i].className = 'doing'; lis[i].textContent = '▶ ' + steps[i]; st.textContent = '作業中…'; st.className = 'ag-st run'; },
@@ -1675,12 +1752,26 @@ async function main() {
     { label: '進め方も指定する', text: 'レビューしました。上限100文字・新しい順の表示もこのままでOKです。作業を分けて、複数のAIエージェントで並行して実装してください。' },
   ]);
   await rv1.approve();
+  await thinking('要件定義書を読み込んで、実装の計画を立てています…', 1100);
+  await ai('実装に入る前に、**作業計画**を確認してください。いきなりコードを書かず、まず計画だけを提示します。');
+  const pm = await planMode('実装計画：チームTODO', [
+    '作業を2つに分け、**SubAgent 2体で並列に**実装する',
+    '**エージェントA**：画面とタスクの基本操作（FR-01〜07, 09）',
+    '**エージェントB**：期限機能（FR-01 期限・FR-08）',
+    'それぞれ別ブランチで作業し、最後に main へマージする',
+    '完成後、要件定義書をもとにテスト仕様書を作成する',
+  ]);
+  await note('**Plan mode**：実装の前に、AIの計画を人間が確認する仕組みです。作業を始めてから方向違いに気付くより、**計画の段階で直すほうがずっと安く済みます。**');
+  await choose([
+    { label: '計画を承認する', text: '計画を確認しました。この分担で実装を進めてください。' },
+    { label: '計画を承認して進める', text: '分担と進め方はこれでOKです。並列で実装を始めてください。' },
+  ]);
+  pm.approve();
 
   /* ---------------- フェーズ2：実装 ---------------- */
   setPhase(1);
   divider('フェーズ2：並列実装');
-  await thinking('要件定義書を読み込んで、作業を分割しています…', 1100);
-  await ai('実装は作業を2つに分け、**AIエージェント2体で並列に**進めます。\nそれぞれ別のブランチで作業し、最後に main ブランチへマージします。');
+  await ai('承認された計画どおり、**SubAgent（AIエージェント）2体で並列に**実装します。\nそれぞれ別のブランチで作業し、最後に main ブランチへマージします。');
   term('git switch -c agent-a/task-basic && git switch -c agent-b/due-date', 'cmd');
   const agA = agentCard('A', 'エージェントA', 'agent-a/task-basic', '画面とタスクの基本操作（FR-01〜07, 09）',
     ['画面の骨組み（src/index.html）', '見た目（src/style.css）', '動き（src/app.js）', 'コミット']);
@@ -1709,7 +1800,9 @@ async function main() {
   };
   await Promise.all([runA(), runB()]);
   await sleep(400);
-  await note('AIエージェントは**同時に何体でも**動かせます。作業は速くなる一方で、**お互いが何をしているかは知りません。**');
+  const queue = reviewQueue(['🅰 エージェントA：画面と基本操作（3ファイル）', '🅱 エージェントB：期限機能（2ファイル）']);
+  await sleep(600);
+  await note('AIエージェントは**同時に何体でも**動かせます。ただし、**お互いが何をしているかは知りません。**\nそして2体の成果物は、同時に**あなた1人のレビュー待ち**になります。AIを10体にすれば、確認待ちも10件。**人間の判断がボトルネック**になります。');
 
   /* ---------------- フェーズ3：マージ ---------------- */
   setPhase(2);
@@ -1758,6 +1851,16 @@ async function main() {
   term('git add src/app.js && git commit -m "Merge agent-b/due-date（並び順は FR-03 に従い新しい順）"', 'cmd');
   await sleep(500);
   term('[main 4f2c1ad] Merge agent-b/due-date', 'ok');
+  await sleep(300);
+  await ai('競合を解消しました。振り返ると、今回の衝突は**防げるものでした。**\n\n2体は「タスクの並び順」という**共通のルールを知らないまま**、それぞれの考えで同じ処理を書き換えていました。\n並列で作らせる前に、次のような**共通の土台**を決めておけば、衝突そのものが起きません。\n\n- データの形（タスクに持たせる項目）\n- 一覧の並び順などの共通ルール\n- どのファイル・関数を、どのエージェントが担当するか');
+  await note('衝突は「起きてから判断する」より「**起きないように先に決める**」ほうがずっと楽です。並列化の前に**共通の土台**を決めるのが、複数エージェント開発でいちばん大事な準備です。');
+  await choose([
+    { label: '共通ルールを文書にする', text: '次から衝突しないように、エージェント共通のルールを docs/conventions.md にまとめてください。' },
+    { label: '計画の段階で確認する', text: '共通ルールを docs/conventions.md にまとめてください。次からは並列実装の計画を承認する前に、このルールも一緒に確認させてください。' },
+  ]);
+  await writeFile('docs/conventions.md', CONV_MD);
+  term('git add docs/conventions.md && git commit -m "エージェント共通ルールを追加"', 'cmd');
+  await ai('`docs/conventions.md` に共通ルールをまとめました。次に並列実装するときは、**計画（Plan mode）の段階でこの文書を各エージェントに渡します。**');
   const lint = tool('Bash', 'npx eslint src/app.js');
   term('npx eslint src/app.js', 'cmd');
   await sleep(1100);
@@ -1792,6 +1895,7 @@ async function main() {
     { label: '観点も指定して依頼する', text: '動作とコードを確認しました。正常系だけでなく、入力ミスなどの異常系も含めたテスト仕様書を作成してください。要件との対応も分かるようにしてください。' },
   ]);
   await rv2.approve();
+  queue.done();
 
   /* ---------------- フェーズ3：テスト仕様書 ---------------- */
   setPhase(3);
@@ -1880,6 +1984,7 @@ async function main() {
     { label: '承認して回帰テストを指示', text: '変更範囲に問題ありません。他の機能を壊していないか、全11件で回帰テストしてください。' },
   ]);
   await rv4.approve();
+  await note('ここまで4回のレビュー依頼は、どれも「**AIが仮定した点・抜け漏れ・AIに判断できない点**」という同じ型でした。こうしたレビュー観点や依頼の型を **Skill**（AIが必要なときに読み込む手順書）としてまとめておけば、毎回同じ品質で使い回せます。');
   await ai('承認ありがとうございます。**全11件の回帰テスト**を実行します。');
   const tt2 = tool('Browser', 'docs/test-spec.md（11件・回帰テスト）');
   S.secondRun = await runTests('2回目（回帰テスト）', 1);
@@ -1907,6 +2012,7 @@ function showSummary() {
   const time = Math.floor(sec / 60) + '<small>分</small>' + pad(sec % 60) + '<small>秒</small>';
   const files = [
     ['docs/requirements.md', '要件定義書', '📝'],
+    ['docs/conventions.md', 'エージェント共通ルール', '📐'],
     ['src/index.html', '画面（HTML）', '💻'],
     ['src/style.css', 'デザイン（CSS）', '🎨'],
     ['src/app.js', '処理（JavaScript）', '⚙️'],
@@ -1920,11 +2026,12 @@ function showSummary() {
       '<div class="stat"><div class="v">' + S.genLines + '<small>行</small></div><div class="l">AIが書いた文書・コード</div></div>' +
       '<div class="stat"><div class="v">' + S.reviewItems + '<small>項目</small></div><div class="l">あなたがレビューした観点（' + S.reviews + '回）</div></div>' +
       '<div class="stat"><div class="v">' + TESTS.length + '<small>件</small></div><div class="l">テスト（初回NG ' + (S.firstRun ? S.firstRun.ng : 0) + '件 → 修正後すべてOK）</div></div>' +
+      '<div class="stat"><div class="v">2<small>体</small> → 1<small>人</small></div><div class="l">作業したAIエージェント → 判断した人間</div></div>' +
       '<div class="stat"><div class="v">' + time + '</div><div class="l">所要時間</div></div>' +
     '</div>' +
     '<div class="roles">' +
-      '<div class="role h"><h3>👤 人間がやったこと</h3><ul><li>作りたい物・目的を伝えた</li><li>AIの質問に答えた</li><li><b>要件・実装・テスト仕様書・修正差分をレビューして承認した</b></li><li>AIが推測で決めた点・テストしない範囲を判断した</li><li><b>エージェント同士の競合で、どちらが正しいかを判断した</b></li><li>バグの修正と再テストを指示した</li></ul></div>' +
-      '<div class="role a"><h3>🤖 AIがやったこと</h3><ul><li>要件の整理と文書化</li><li>2体のエージェントで並列に実装</li><li>マージと競合の検出・解消</li><li>要件に対応したテスト仕様書の作成</li><li>打鍵テスト・原因調査・修正・回帰テスト</li></ul></div>' +
+      '<div class="role h"><h3>👤 人間がやったこと</h3><ul><li>作りたい物・目的を伝えた</li><li>AIの質問に答えた</li><li>実装の計画（分担）を確認して承認した</li><li><b>要件・実装・テスト仕様書・修正差分をレビューして承認した</b></li><li>AIが推測で決めた点・テストしない範囲を判断した</li><li><b>エージェント同士の競合で、どちらが正しいかを判断した</b></li><li>次の衝突を防ぐ共通ルールを決めた</li><li>バグの修正と再テストを指示した</li></ul></div>' +
+      '<div class="role a"><h3>🤖 AIがやったこと</h3><ul><li>要件の整理と文書化</li><li>実装計画の作成（Plan mode）</li><li>2体のエージェント（SubAgent）で並列に実装</li><li>マージと競合の検出・解消、共通ルールの文書化</li><li>要件に対応したテスト仕様書の作成</li><li>打鍵テスト・原因調査・修正・回帰テスト</li></ul></div>' +
     '</div>' +
     '<div class="msgline"><b>ポイント：</b>AIは速く大量に作れますが、<b>推測で補ったり、間違えたりもします</b>。<br>作業のたびにレビューして承認する ―― 「何を作るか決める」「出来上がった物に責任を持つ」のは、これからも人間の役割です。</div>' +
     '<h2>成果物</h2>' +

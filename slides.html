@@ -27,6 +27,7 @@ p{margin:0}
 .big{font-size:30px;line-height:1.7}
 ul.pt{margin:0;padding:0;list-style:none}
 ul.pt li{position:relative;padding-left:36px;font-size:27px;line-height:1.6;margin:0 0 16px}
+ul.pt.tight li{margin-bottom:8px;line-height:1.5}
 ul.pt li::before{content:"";position:absolute;left:6px;top:.62em;width:12px;height:12px;border-radius:3px;background:var(--accent)}
 b,.em{color:var(--accent)}
 .warn{color:var(--warn)}
@@ -62,9 +63,10 @@ b,.em{color:var(--accent)}
 .quote{font-size:40px;line-height:1.6;font-weight:800;text-align:center;margin:40px 0 20px}
 .quote .a{color:var(--accent)}.quote .h{color:#c27c00}
 .rules{display:grid;gap:12px}
-.rule{display:flex;align-items:center;gap:22px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:14px 22px}
-.rule .no{flex:none;width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center}
-.rule b{flex:none;width:300px;color:var(--ink);font-size:25px}
+.rule{display:flex;align-items:center;gap:22px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:10px 22px}
+.rule.new{border:2px solid var(--accent);background:#eef2fd}
+.rule .no{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center}
+.rule b{flex:none;width:330px;color:var(--ink);font-size:25px}
 .rule span{font-size:21px;color:#3d4350;line-height:1.5}
 .tmpl{font-family:var(--mono);font-size:22px;line-height:1.9;background:#141a2e;color:#e7eaf3;border-radius:14px;padding:20px 28px;white-space:pre-wrap}
 .tmpl .k{color:#ffcf6b}
@@ -74,6 +76,7 @@ b,.em{color:var(--accent)}
 .cf div{padding:0 18px;white-space:pre}
 .cf .o{background:#e7f6ec}.cf .t{background:#e8eefc}.cf .m{background:#d9dde5;font-weight:700}
 .res{display:inline-block;font-weight:800;font-size:18px;padding:2px 12px;border-radius:999px}
+.tag{display:inline-block;font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);background:#eef2fd;border:1px solid #c7d4f7;border-radius:8px;padding:2px 12px}
 .res.ok{background:#dcfce7;color:var(--ok)}.res.ng{background:#fee2e2;color:var(--ng)}
 
 /* UI */
@@ -105,7 +108,7 @@ b,.em{color:var(--accent)}
 <section class="slide title" data-notes="
 - 今日は資料で説明するより、実際に体験してもらうのが早いので、デモ中心で進めます
 - 前提知識は不要。プログラミング経験がなくても分かる内容です
-- 目安：全体で20〜25分（デモ約8分＋説明・質疑）">
+- 目安：全体で25分前後（デモ約9分＋説明・質疑）">
   <span class="badge">チーム勉強会</span>
   <h1>AI駆動開発 入門</h1>
   <div class="sub">選択肢を選ぶだけで「作る → 確かめる」までを体験する</div>
@@ -164,9 +167,9 @@ b,.em{color:var(--accent)}
   <div class="kicker">DEMO</div>
   <h1>体験デモ：チームTODOアプリを作る</h1>
   <div class="flow">
-    <div class="f"><div class="e">📝</div><b>要件定義</b><small>AIの質問に答える</small></div>
+    <div class="f"><div class="e">📝</div><b>要件定義</b><small>質問に答え、計画を承認</small></div>
     <div class="f"><div class="e">🤖🤖</div><b>並列実装</b><small>2体のAIが分担</small></div>
-    <div class="f"><div class="e">🔀</div><b>マージ</b><small>競合を人間が判断</small></div>
+    <div class="f"><div class="e">🔀</div><b>マージ</b><small>競合を判断し、ルール化</small></div>
     <div class="f"><div class="e">📋</div><b>テスト仕様書</b><small>観点をレビュー</small></div>
     <div class="f"><div class="e">🖱️</div><b>打鍵テスト</b><small>AIが画面を操作</small></div>
     <div class="f"><div class="e">🔧</div><b>修正・再テスト</b><small>差分を承認</small></div>
@@ -180,12 +183,13 @@ b,.em{color:var(--accent)}
 - デモ後の振り返り①。要件定義の場面を思い出してもらう
 - AIはいきなり作らず、まず質問してきた
 - それでも指示にない部分は推測で埋めている → だからレビュー依頼が出た
-- 例：上限100文字、新しい順の表示 … 誰も指定していない">
+- 例：上限100文字、新しい順の表示 … 誰も指定していない
+- 実装の前に、AIが計画だけを出してきた場面も思い出してもらう（Plan mode）。方向違いは計画の段階で直すのがいちばん安い">
   <div class="kicker">LOOK BACK 1</div>
   <h1>要件定義：AIは「推測で補う」</h1>
   <div class="grid2">
-    <div class="card a"><h2>🤖 AIがしたこと</h2><ul><li>不明点を<b>質問</b>してきた</li><li>数十秒で要件定義書を作成</li><li>指示にない部分は<b>推測で補った</b></li></ul></div>
-    <div class="card h"><h2>👤 人間がしたこと</h2><ul><li>目的と前提を伝えた</li><li>「AIが仮定で決めた点」を<b>レビュー</b></li><li>運用に合うかを判断した</li></ul></div>
+    <div class="card a"><h2>🤖 AIがしたこと</h2><ul><li>不明点を<b>質問</b>してきた</li><li>数十秒で要件定義書を作成</li><li>指示にない部分は<b>推測で補った</b></li><li>実装前に<b>計画</b>を提示した</li></ul></div>
+    <div class="card h"><h2>👤 人間がしたこと</h2><ul><li>目的と前提を伝えた</li><li>「AIが仮定で決めた点」を<b>レビュー</b></li><li>運用に合うかを判断した</li><li>計画を確認して<b>承認</b>した</li></ul></div>
   </div>
   <div class="callout">💡 AIの成果物は「<b>それらしく見える</b>」のが落とし穴。推測で決めた所を見極めるのがレビューの役目</div>
 </section>
@@ -196,7 +200,10 @@ b,.em{color:var(--accent)}
 - 2体のAIは並行して速く作れるが、お互いの判断を知らない
 - Bは良かれと思って期限順にした。どちらのコードも動く
 - 決め手はコードの出来ではなく要件定義書（FR-03 新しい順）
-- 要件を文書に残しておく意味がここで効いてくる">
+- 要件を文書に残しておく意味がここで効いてくる
+- ただし本当に大事なのは「衝突してから判断する」より「衝突させない」こと
+- データの形・並び順などの共通ルール・担当範囲を、並列化の前に決めて全エージェントに渡す（デモでは事後に docs/conventions.md にまとめた）
+- Bの「期限順」は要件にない良かれと思った改善。要件を変えるかは人間が決める">
   <div class="kicker">LOOK BACK 2</div>
   <h1>並列実装とマージ：判断の基準は「要件」</h1>
   <div class="grid2" style="align-items:start">
@@ -215,7 +222,7 @@ b,.em{color:var(--accent)}
       <li>決め手は<b>要件定義書</b></li>
     </ul>
   </div>
-  <div class="callout">💡 Bの「期限順」は要件にない<b>良かれと思った改善</b>。要件を変えるかどうかを決めるのは人間</div>
+  <div class="callout">💡 本当は：並列化の前に<b>共通の土台</b>（データの形・並び順などのルール・担当範囲）を決めておけば、<b>衝突そのものを防げる</b></div>
 </section>
 
 <!-- 8 -->
@@ -242,30 +249,35 @@ b,.em{color:var(--accent)}
 <section class="slide" data-notes="
 - デモで人間がしたことを整理
 - どれもキーボードでコードを書く作業ではない
-- ただし、どれもAIには任せられない仕事">
+- ただし、どれもAIには任せられない仕事
+- AIは2体でも10体でも増やせるが、レビュー依頼はすべて1人の人間に集まる（デモの「レビュー待ち 2件」）
+- 人の判断がボトルネックになる。並列にする数は、人が確認できる量に合わせる">
   <div class="kicker">ROLES</div>
   <h1>デモで人間がやったこと</h1>
   <div class="grid3">
     <div class="card"><h2>🗣 伝える</h2><p>作りたい物と目的、前提・制約を伝えた</p></div>
     <div class="card"><h2>🔍 確かめる</h2><p>要件・実装・テスト仕様書・修正差分の<b>4回レビュー</b></p></div>
-    <div class="card"><h2>⚖️ 決める</h2><p>競合の採用、テストしない範囲、修正の承認</p></div>
+    <div class="card"><h2>⚖️ 決める</h2><p>計画の承認、競合の採用、共通ルール、テストしない範囲</p></div>
   </div>
-  <div class="quote"><span class="a">AIは「速く作る」</span>のが得意<br><span class="h">人間は「正しく決める」</span>のが役割</div>
+  <div class="quote" style="margin:26px 0 14px;font-size:36px"><span class="a">AIは「速く作る」</span>のが得意<br><span class="h">人間は「正しく決める」</span>のが役割</div>
+  <div class="callout" style="margin-top:0">⚠️ AIは何体にも増やせる。でも<b>判断する人間は増えない</b> → 人の判断が<b>ボトルネック</b>になる</div>
 </section>
 
 <!-- 10 -->
 <section class="slide" data-notes="
-- デモから引き出せる原則を5つに整理
-- 特に3（毎回レビュー）と4（テストで確かめる）はデモで実感できたはず
-- 5は社内での使い方として一番大事">
+- デモから引き出せる原則を6つに整理
+- 3（共通の土台）は複数のAIを使うときにいちばん大事な準備。デモの競合はこれで防げた
+- 4（毎回レビュー）と5（テストで確かめる）はデモで実感できたはず
+- 6は社内での使い方として一番大事">
   <div class="kicker">PRINCIPLES</div>
-  <h1>うまく進めるための5つの原則</h1>
-  <div class="rules">
+  <h1 style="margin-bottom:20px">うまく進めるための6つの原則</h1>
+  <div class="rules" style="gap:10px">
     <div class="rule"><div class="no">1</div><b>目的と背景を伝える</b><span>「何を」だけでなく「なぜ」を伝えると提案の質が上がる</span></div>
     <div class="rule"><div class="no">2</div><b>要件を文書に残す</b><span>AIへの指示書であり、迷った時の判断の拠り所</span></div>
-    <div class="rule"><div class="no">3</div><b>毎回レビューする</b><span>推測・対象外にした判断・独自の改善を探す</span></div>
-    <div class="rule"><div class="no">4</div><b>テストで確かめる</b><span>動く ≠ 正しい。修正後は全件の回帰テスト</span></div>
-    <div class="rule"><div class="no">5</div><b>責任は人間が持つ</b><span>何を作り、何を出すかは人間が決める</span></div>
+    <div class="rule new"><div class="no">3</div><b>並列化の前に土台を決める</b><span>データの形・共通ルール・担当範囲を先に決めて渡す</span></div>
+    <div class="rule"><div class="no">4</div><b>毎回レビューする</b><span>推測・対象外にした判断・独自の改善を探す</span></div>
+    <div class="rule"><div class="no">5</div><b>テストで確かめる</b><span>動く ≠ 正しい。修正後は全件の回帰テスト</span></div>
+    <div class="rule"><div class="no">6</div><b>責任は人間が持つ</b><span>何を作り、何を出すかは人間が決める</span></div>
   </div>
 </section>
 
@@ -273,12 +285,14 @@ b,.em{color:var(--accent)}
 <section class="slide" data-notes="
 - 社内で使う上での注意点。ここはしっかり伝える
 - 1番目は社内ルールに必ず従う（利用可能なツール・入力してよい情報の範囲）
-- ※社内のAI利用ガイドラインがあれば、ここで名前や窓口を紹介する">
+- ※社内のAI利用ガイドラインがあれば、ここで名前や窓口を紹介する
+- 3番目：AIを増やすほどレビュー待ちが溜まる。確認しきれない量を並列で作らせない">
   <div class="kicker">CAUTION</div>
-  <h1>⚠️ 注意しておきたいこと</h1>
-  <ul class="pt">
+  <h1 style="margin-bottom:20px">⚠️ 注意しておきたいこと</h1>
+  <ul class="pt tight">
     <li><b class="warn">機密情報・個人情報を入力しない</b><br><span class="mini">社内のAI利用ルールに従い、許可されたツールと範囲で使う</span></li>
     <li><b class="warn">もっともらしい誤りに注意</b><br><span class="mini">自信ありげな出力でも間違っていることがある</span></li>
+    <li><b class="warn">人間の判断がボトルネックになる</b><br><span class="mini">AIを増やすほどレビュー待ちが溜まる。並列の数は確認できる量に合わせる</span></li>
     <li><b class="warn">「良かれと思った改善」に注意</b><br><span class="mini">頼んでいない変更が入っていないか、差分で確認する</span></li>
     <li><b class="warn">セキュリティ・ライセンスの確認</b><br><span class="mini">生成されたコードも、人が書いたコードと同じ基準でチェックする</span></li>
   </ul>
@@ -310,6 +324,24 @@ b,.em{color:var(--accent)}
 </section>
 
 <!-- 13 -->
+<section class="slide" data-notes="
+- 補足スライド。時間が押していたら飛ばしてよい
+- 3つとも、デモの中で実際に登場した場面に対応している
+- Plan mode：いきなり作らせず、計画を見てから進める
+- SubAgent：作業を分けて並列に任せる。ただし共通の土台とレビュー量に注意
+- Skill：今日のレビュー観点や依頼の型をテンプレートにしておけば、毎回同じ品質で使い回せる">
+  <div class="kicker">ONE MORE STEP（補足）</div>
+  <h1>もう一歩：AIを使いこなす仕組み</h1>
+  <table class="tbl" style="font-size:22px">
+    <tr><th style="width:190px">仕組み</th><th>何をするものか</th><th style="width:330px">デモでの場面</th></tr>
+    <tr><td><span class="tag">Plan mode</span></td><td>AIはファイルを変更せず、<b>計画だけを提示</b>する。人間が承認してから作業に入る</td><td>要件定義のあと、実装計画を確認して承認</td></tr>
+    <tr><td><span class="tag">SubAgent</span></td><td>作業を切り出して<b>別のAIエージェントに任せる</b>。それぞれが独立して並列に動く</td><td>エージェントA・Bが別ブランチで分担して実装</td></tr>
+    <tr><td><span class="tag">Skill</span></td><td>手順・チェックリスト・依頼の型を<b>手順書としてまとめ</b>、AIが必要なときに読み込んで使い回す</td><td>毎回同じ型だった4回のレビュー依頼</td></tr>
+  </table>
+  <div class="callout">💡 どれも「AIに任せる範囲」と「人間が確認するタイミング」を仕組みとして決めておくための道具</div>
+</section>
+
+<!-- 14 -->
 <section class="slide title" data-notes="
 - 最後に一言でまとめて質疑へ
 - デモURLは共有済み。各自で触ってみてもらう（1人でも最後まで進められる）
