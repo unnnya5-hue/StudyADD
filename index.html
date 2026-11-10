@@ -114,7 +114,11 @@ button{font:inherit;color:inherit}
 .badge.run{background:rgba(122,162,247,.22);color:var(--accent)}
 
 /* preview */
-.preview{flex:1;display:none;flex-direction:column;border-left:1px solid var(--border);min-width:0;background:#e9ecf2;position:relative}
+.main.testing{grid-template-columns:minmax(0,1fr) 400px}
+.main.testing .explorer{display:none}
+.main.testing .doc{padding:16px 18px 60px}
+.doc td:nth-child(-n+2){white-space:nowrap}
+.preview{flex:0 0 420px;display:none;flex-direction:column;border-left:1px solid var(--border);min-width:0;background:#e9ecf2;position:relative}
 .preview.show{display:flex}
 .browserbar{height:36px;flex:none;display:flex;align-items:center;gap:8px;padding:0 10px;background:#2b2d31;border-bottom:1px solid var(--border)}
 .browserbar .dots{display:flex;gap:5px}.browserbar .dots i{width:10px;height:10px;border-radius:50%;background:#555;display:block}
@@ -166,6 +170,46 @@ button{font:inherit;color:inherit}
 .plan li{padding:2px 0;color:var(--muted)}
 .plan li.doing{color:#fff}
 .plan li.done{color:var(--ok)}
+.review{background:#1f2128;border:1px solid #4a4f63;border-left:3px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:13px}
+.rv-h{display:flex;align-items:center;gap:8px;font-weight:700;color:#fff;margin-bottom:4px}
+.rv-h .tgt{margin-left:auto;font:11.5px var(--mono);color:var(--accent);background:none;border:1px solid #3d4250;border-radius:6px;padding:1px 7px;cursor:pointer;white-space:nowrap}
+.rv-h .tgt:hover{border-color:var(--accent)}
+.rv-lead{color:#cfd3db;margin-bottom:2px}
+.rv-lead b{color:var(--warn)}
+.rv-sh{font-size:12px;font-weight:700;color:var(--warn);margin:9px 0 3px;animation:rise .3s ease-out both}
+.rv-i{display:flex;gap:8px;padding:3px 0;animation:rise .3s ease-out both}
+.rv-i .cb{flex:none;width:15px;height:15px;margin-top:3px;border:1.5px solid #6b7080;border-radius:4px;display:grid;place-items:center;font-size:11px;font-weight:700;color:#111;transition:.2s}
+.rv-i.ck .cb{background:var(--ok);border-color:var(--ok)}
+.rv-i.ck .cb::after{content:"✓"}
+.rv-i b{font-weight:600;color:#e6e8ec}
+.rv-i small{display:block;color:var(--muted);font-size:12px;line-height:1.45}
+.rv-foot{margin-top:8px;padding-top:6px;border-top:1px dashed #3d4250;font-size:12px;color:var(--warn)}
+.rv-foot.done{color:var(--ok);font-weight:700}
+.agent{background:#1d1e21;border:1px solid #303237;border-radius:10px;padding:8px 12px;font-size:13px}
+.ag-h{display:flex;align-items:center;gap:8px}
+.ag-h code{font:11.5px var(--mono);color:var(--muted)}
+.ag-av{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#111}
+.ag-av.A{background:#4ade80}.ag-av.B{background:#7aa2f7}
+.ag-st{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap}
+.ag-st.run{color:var(--accent)}.ag-st.ok{color:var(--ok)}
+.ag-d{font-size:12px;color:var(--muted);margin:2px 0 4px}
+.agent ul{list-style:none;margin:0;padding:0}
+.agent li{padding:1px 0;color:var(--muted);font-size:12.5px}
+.agent li.doing{color:#fff}.agent li.done{color:var(--ok)}
+.ag-bar{height:4px;border-radius:4px;background:var(--panel3);margin-top:6px;overflow:hidden}
+.ag-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s}
+.cf{font:13px/1.65 var(--mono);padding:10px 0 40px;min-width:max-content}
+.cf .ln{display:flex;white-space:pre}
+.cf .ln .g{width:44px;flex:none;text-align:right;padding-right:14px;color:#5c606a;user-select:none}
+.cf .ours{background:rgba(74,222,128,.12)}
+.cf .theirs{background:rgba(122,162,247,.15)}
+.cf .mk{color:#fff;font-weight:700;background:#3a3c42}
+.cf .mk.o{background:rgba(74,222,128,.32)}
+.cf .mk.t{background:rgba(122,162,247,.36)}
+.cf-act{padding:3px 0 3px 58px;font:12px var(--sans);color:var(--warn)}
+.cf-act button{background:none;border:0;color:var(--accent);cursor:pointer;padding:0 4px;font-size:12px}
+.cf-act button:hover{text-decoration:underline}
+.tree .file .badge-c{margin-left:auto;font-size:11px;color:var(--ng);font-weight:800}
 .chat-foot{flex:none;border-top:1px solid var(--border);padding:10px 12px 12px;background:var(--panel)}
 .choices{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .choices:empty{display:none}
@@ -236,7 +280,7 @@ button{font:inherit;color:inherit}
 
 /* responsive */
 @media (max-width:1180px){
-  .main{grid-template-columns:0 minmax(0,1fr) 360px}
+  .main,.main.testing{grid-template-columns:minmax(0,1fr) 360px}
   .explorer{display:none}
   .step .lbl{display:none}
   .step.active .lbl{display:inline}
@@ -248,7 +292,7 @@ button{font:inherit;color:inherit}
   .main{display:flex;flex-direction:column}
   .center{height:70vh}
   .workarea{flex-direction:column}
-  .preview{border-left:0;border-top:1px solid var(--border);min-height:45%}
+  .preview{flex:1 1 auto;border-left:0;border-top:1px solid var(--border);min-height:45%}
   .chat{height:75vh;border-left:0;border-top:1px solid var(--border)}
   .roles{grid-template-columns:1fr}
   .card{padding:22px 18px}
@@ -327,15 +371,15 @@ button{font:inherit;color:inherit}
     <p class="lead">選択肢からAIに指示を出すだけで、<b>要件定義 → 実装 → テスト仕様書 → 打鍵テスト → バグ修正</b>までをひと通り体験できます。<br>キーボードでコードを書く場面は一度もありません。</p>
     <div class="flow">
       <div class="f"><div class="e">📝</div><b>1. 要件定義</b><small>作りたい物を伝え、AIの質問に答える</small></div>
-      <div class="f"><div class="e">💻</div><b>2. 実装</b><small>AIがコードを書く</small></div>
+      <div class="f"><div class="e">🤖🤖</div><b>2. 並列実装・マージ</b><small>2体のAIが分担。食い違いを人間が判断</small></div>
       <div class="f"><div class="e">📋</div><b>3. テスト仕様書</b><small>要件から試験項目を作る</small></div>
       <div class="f"><div class="e">🖱️</div><b>4. 打鍵テスト</b><small>AIが画面を操作して確認</small></div>
       <div class="f"><div class="e">🔧</div><b>5. 修正・再テスト</b><small>見つかったバグを直す</small></div>
     </div>
     <dl class="kv">
       <dt>今回作るもの</dt><dd>チームで使うTODO管理アプリ（ブラウザで動くWebアプリ）</dd>
-      <dt>あなたの役割</dt><dd>やりたいことを伝える・AIの質問に答える・成果物を確認してOKを出す</dd>
-      <dt>所要時間</dt><dd>約6分（右上で速度を変えたり、演出をスキップしたりできます）</dd>
+      <dt>あなたの役割</dt><dd>やりたいことを伝える・AIの質問に答える・<b>AIからのレビュー依頼に応えて、成果物を確認・承認する</b></dd>
+      <dt>所要時間</dt><dd>約8分（右上で速度を変えたり、演出をスキップしたりできます）</dd>
     </dl>
     <div class="actions">
       <button class="btn primary" id="startBtn">▶ はじめる</button>
@@ -603,6 +647,7 @@ function save() {
 
 // ---- タスク操作 ----
 function addTask(title, due) {
+  // 新しいタスクを先頭に追加（新しい順）
   tasks.unshift({
     id: Date.now().toString(36) + Math.random().toString(36).slice(2),
     title: title,
@@ -728,6 +773,14 @@ render();
 const JS_V1 = JS_HEAD + JS_SUBMIT_V1 + JS_TAIL;
 const JS_V2 = JS_HEAD + JS_SUBMIT_V2 + JS_TAIL;
 
+// マージ競合版（エージェントA：新しい順 / エージェントB：期限が近い順）
+const A_BLOCK = JS_V1.match(/  \/\/ 新しいタスクを先頭に追加[\s\S]*?\n  \}\);\n/)[0];
+const B_BLOCK = A_BLOCK.replace(/  \/\/ 新しいタスクを先頭に追加[^\n]*\n/, '').replace('tasks.unshift(', 'tasks.push(') +
+  "  // 期限が近い順に並べ替え（期限なしは最後）\n" +
+  "  tasks.sort((a, b) => (a.due || '9999-12-31').localeCompare(b.due || '9999-12-31'));\n";
+const JS_CONFLICT = JS_V1.replace(A_BLOCK, () =>
+  '<<<<<<< agent-a/task-basic（エージェントA）\n' + A_BLOCK + '=======\n' + B_BLOCK + '>>>>>>> agent-b/due-date（エージェントB）\n');
+
 const TEST_MD = `# テスト仕様書：チームTODO
 
 | 項目 | 内容 |
@@ -773,7 +826,7 @@ const S = {
   speed: 1, skip: false, wakers: new Set(),
   files: {}, order: [], tabs: [], active: null, mdMode: {},
   streaming: null, pick: null, started: false, startAt: 0,
-  instructions: 0, genLines: 0, diffLines: [], firstRun: null, secondRun: null,
+  instructions: 0, genLines: 0, reviews: 0, reviewItems: 0, diffLines: [], firstRun: null, secondRun: null,
 };
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -942,7 +995,7 @@ function renderTree() {
     fs.forEach((p) => {
       const f = S.files[p], lg = langOf(p);
       h += '<div class="file' + (S.active === p ? ' sel' : '') + (f.flash ? ' flash' : '') + '" data-p="' + p + '"><span class="ico ' + lg + '">' + ICON[lg] + '</span>' + baseName(p) +
-        (f.mod ? '<span class="badge-m">M</span>' : '<span class="badge-u">U</span>') + '</div>';
+        (f.conflict ? '<span class="badge-c">!</span>' : f.mod ? '<span class="badge-m">M</span>' : '<span class="badge-u">U</span>') + '</div>';
       f.flash = false;
     });
   });
@@ -985,6 +1038,11 @@ function renderEditor(resetScroll) {
   const f = S.files[id];
   const lg = langOf(id);
   const streaming = S.streaming === id;
+  if (f.conflict) {
+    ed.innerHTML = conflictHtml(f.content);
+    if (resetScroll) { const a = ed.querySelector('.cf-act'); ed.scrollTop = a ? a.offsetTop - 140 : 0; } else ed.scrollTop = keepTop;
+    return;
+  }
   if (lg === 'md') {
     const mode = streaming ? 'src' : (S.mdMode[id] || 'view');
     const bar = '<div class="mdbar"><button data-m="view" class="' + (mode === 'view' ? 'on' : '') + '">📄 プレビュー</button><button data-m="src" class="' + (mode === 'src' ? 'on' : '') + '">ソース</button></div>';
@@ -1001,6 +1059,20 @@ function renderEditor(resetScroll) {
   else if (resetScroll) ed.scrollTop = 0;
   else ed.scrollTop = keepTop;
 }
+function conflictHtml(text) {
+  let st = '', h = '<div class="cf">';
+  text.split('\n').forEach((line, i) => {
+    let cls;
+    if (line.startsWith('<<<<<<<')) {
+      h += '<div class="cf-act">⚠️ 競合 ｜<button data-pick="0">エージェントAの変更を採用</button>｜<button data-pick="1">エージェントBの変更を採用</button></div>';
+      cls = 'mk o'; st = 'ours';
+    } else if (line.startsWith('=======')) { cls = 'mk'; st = 'theirs'; }
+    else if (line.startsWith('>>>>>>>')) { cls = 'mk t'; st = ''; }
+    else cls = st;
+    h += '<div class="ln ' + cls + '"><span class="g">' + (i + 1) + '</span><span>' + (cls.startsWith('mk') ? esc(line) : highlight(line, 'js')) + '</span></div>';
+  });
+  return h + '</div>';
+}
 function codeHtml(text, lg, caret) {
   const n = text.split('\n').length;
   let g = '';
@@ -1008,6 +1080,8 @@ function codeHtml(text, lg, caret) {
   return '<div class="code"><div class="gutter">' + g + '</div><pre>' + highlight(text, lg) + (caret ? '<span class="caret"></span>' : '') + '</pre></div>';
 }
 $('#editor').addEventListener('click', (e) => {
+  const pk = e.target.closest('[data-pick]');
+  if (pk && S.pick) { const c = document.querySelectorAll('#choices .choice')[Number(pk.dataset.pick)]; if (c) c.click(); return; }
   const b = e.target.closest('.mdbar button');
   if (b && S.streaming !== S.active) { S.mdMode[S.active] = b.dataset.m; renderEditor(true); }
 });
@@ -1068,6 +1142,54 @@ function plan(title, items) {
   };
 }
 
+/* ---------- レビュー依頼カード ---------- */
+async function review(target, lead, sections) {
+  const el = addEl('review', '<div class="rv-h">🔍 レビュー依頼<button class="tgt" data-open="' + target + '">' + esc(baseName(target)) + (target.startsWith('diff:') ? '（差分）' : '') + ' を開く</button></div><div class="rv-lead">' + inlineMd(lead) + '</div>');
+  const items = [];
+  await sleep(500);
+  for (const sec of sections) {
+    addTo(el, 'rv-sh', esc(sec.h));
+    await sleep(200);
+    for (const it of sec.items) {
+      items.push(addTo(el, 'rv-i', '<span class="cb"></span><div><b>' + inlineMd(it[0]) + '</b><small>' + inlineMd(it[1]) + '</small></div>'));
+      await sleep(260);
+    }
+  }
+  const foot = addTo(el, 'rv-foot', '⏳ あなたのレビュー待ち（' + items.length + '項目）');
+  S.reviews++;
+  S.reviewItems += items.length;
+  return {
+    async approve() {
+      for (const li of items) { li.classList.add('ck'); await sleep(150); }
+      foot.className = 'rv-foot done';
+      foot.textContent = '✅ レビュー済み（' + items.length + '項目 確認：あなた）';
+      scrollChat();
+      await sleep(400);
+    },
+  };
+}
+function addTo(parent, cls, html) {
+  const d = document.createElement('div');
+  d.className = cls; d.innerHTML = html;
+  parent.appendChild(d); scrollChat();
+  return d;
+}
+log.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-open]');
+  if (b && S.tabs.includes(b.dataset.open)) openTab(b.dataset.open);
+});
+
+/* ---------- エージェントカード ---------- */
+function agentCard(key, name, branch, role, steps) {
+  const el = addEl('agent', '<div class="ag-h"><span class="ag-av ' + key + '">' + key + '</span><b>' + esc(name) + '</b><code>' + esc(branch) + '</code><span class="ag-st">待機中</span></div><div class="ag-d">担当：' + esc(role) + '</div><ul>' + steps.map((t) => '<li>☐ ' + esc(t) + '</li>').join('') + '</ul><div class="ag-bar"><i></i></div>');
+  const lis = el.querySelectorAll('li'), bar = el.querySelector('.ag-bar i'), st = el.querySelector('.ag-st');
+  return {
+    doing(i) { lis[i].className = 'doing'; lis[i].textContent = '▶ ' + steps[i]; st.textContent = '作業中…'; st.className = 'ag-st run'; },
+    done(i) { lis[i].className = 'done'; lis[i].textContent = '✓ ' + steps[i]; bar.style.width = ((i + 1) / steps.length * 100) + '%'; },
+    finish() { st.textContent = '✓ 完了'; st.className = 'ag-st ok'; },
+  };
+}
+
 /* ---------- 選択肢 ---------- */
 function choose(opts) {
   S.skip = false;
@@ -1120,7 +1242,7 @@ function term(text, cls) {
 }
 
 /* ---------- 上部ステップ・ステータス ---------- */
-const PHASES = ['要件定義', '実装', 'テスト仕様書', '打鍵テスト', '修正・再テスト', '完成'];
+const PHASES = ['要件定義', '並列実装', 'マージ', 'テスト仕様書', '打鍵テスト', '修正・再テスト', '完成'];
 function setPhase(idx) {
   $('#stepper').innerHTML = PHASES.map((p, i) => (i ? '<span class="sep">›</span>' : '') +
     '<div class="step' + (i < idx ? ' done' : i === idx ? ' active' : '') + '"><span class="n">' + (i < idx ? '✓' : i + 1) + '</span><span class="lbl">' + p + '</span></div>').join('');
@@ -1138,7 +1260,7 @@ setInterval(() => {
 
 /* ---------- ファイル書き込み演出 ---------- */
 async function writeFile(path, content, opts = {}) {
-  const tl = tool(opts.mod ? 'Edit' : 'Write', path);
+  const tl = opts.silent ? { done() {} } : tool(opts.mod ? 'Edit' : 'Write', path);
   setFile(path, '', opts.mod);
   S.streaming = path;
   openTab(path);
@@ -1152,7 +1274,7 @@ async function writeFile(path, content, opts = {}) {
   S.genLines += lines;
   renderEditor(true);
   tl.done('✓ ' + lines + '行');
-  await sleep(400);
+  if (!opts.silent) await sleep(400);
 }
 
 /* =====================================================================
@@ -1314,6 +1436,7 @@ function setResult(id, val) {
 }
 
 async function runTests(label) {
+  S.skip = false; // 打鍵テストは見せ場なので、直前のスキップはここで止める
   S.mdMode['docs/test-spec.md'] = 'view';
   openTab('docs/test-spec.md');
   const ed = $('#editor');
@@ -1410,23 +1533,111 @@ async function main() {
   await ai(c2 === 0 ? 'ありがとうございます。いただいた条件で要件定義書を作成します。' : '承知しました。一般的なTODOアプリで必要な機能を補いながら、要件定義書を作成します。');
   term('mkdir docs src', 'cmd');
   await writeFile('docs/requirements.md', REQ_MD);
-  await ai('要件定義書を作成しました（左のエディタで内容を確認できます）。\n\n- 機能要件 **9項目**（FR-01〜FR-09）\n- 「**対象外**」として、ログインや通知など**今回は作らない物**も明記しました\n\n内容に問題がなければ、実装に進みます。');
-  await note('要件定義書は数十秒で完成。人間の仕事は「**書くこと**」から「**読んで判断すること**」に変わります。');
-  await choose([
-    { label: 'レビューしてOKを出す', text: '要件定義書を確認しました。この内容でOKです。実装を進めてください。' },
-    { label: '進め方も指定する', text: 'この要件でOKです。HTML・CSS・JavaScriptで、なるべくシンプルな構成で実装してください。' },
+  await ai('要件定義書のドラフトを作成しました（左のエディタで確認できます）。機能要件は **9項目**（FR-01〜FR-09）です。\n\nただし、ご指示になかった部分は**AIが推測で補っています**。実装に進む前に、下記のレビューをお願いします。');
+  const rv1 = await review('docs/requirements.md', '**推測で決めた部分が誤っていると、この後の実装・テストがすべて手戻りになります。**', [
+    { h: '⚠️ AIが仮定で決めた点（要確認）', items: [
+      ['タスク名の上限を100文字にした（FR-01）', 'ご指定がなかったため、一般的な値で仮置きしています'],
+      ['データは各PCのブラウザに保存（4章）', 'PCやブラウザを変えると、タスクは引き継がれません'],
+      ['一覧は「新しい順」に表示（FR-03）', '「期限が近い順」のほうが運用に合う可能性もあります'],
+      ['期限当日は「期限切れ」にしない（FR-08）', '期限の翌日から赤字になります'],
+    ] },
+    { h: '🔍 抜け漏れの確認', items: [
+      ['「対象外」の機能が本当に不要か（5章）', 'ログイン・通知・スマホ対応は今回作りません'],
+      ['業務に必要な機能が足りているか', '担当者の割り当て・並び替えなどは含めていません'],
+    ] },
+    { h: '🙋 AIには判断できない点', items: [
+      ['チームの実際の運用に合っているか', '現場の使い方を知っているのはあなたです'],
+    ] },
   ]);
+  await note('AIの成果物は「**それらしく見える**」のが落とし穴。書く時間が減った分、**AIが推測で決めた所を人間が見極める**のがレビューの役目です。');
+  await choose([
+    { label: 'レビューしてOKを出す', text: '要件定義書をレビューしました。仮定の部分もこの内容でOKです。実装を進めてください。' },
+    { label: '進め方も指定する', text: 'レビューしました。上限100文字・新しい順の表示もこのままでOKです。作業を分けて、複数のAIエージェントで並行して実装してください。' },
+  ]);
+  await rv1.approve();
 
   /* ---------------- フェーズ2：実装 ---------------- */
   setPhase(1);
-  divider('フェーズ2：実装');
-  await thinking('要件定義書を読み込んでいます…', 1100);
-  const pl = plan('📋 実装計画', ['画面の骨組み（src/index.html）', '見た目（src/style.css）', '動き（src/app.js）', '構文チェックと動作確認']);
-  await ai('要件定義書をもとに、上の計画で実装します。');
-  pl.doing(0); await writeFile('src/index.html', HTML_SRC); pl.done(0);
-  pl.doing(1); await writeFile('src/style.css', CSS_SRC); pl.done(1);
-  pl.doing(2); await writeFile('src/app.js', JS_V1); pl.done(2);
-  pl.doing(3);
+  divider('フェーズ2：並列実装');
+  await thinking('要件定義書を読み込んで、作業を分割しています…', 1100);
+  await ai('実装は作業を2つに分け、**AIエージェント2体で並列に**進めます。\nそれぞれ別のブランチで作業し、最後に main ブランチへマージします。');
+  term('git switch -c agent-a/task-basic && git switch -c agent-b/due-date', 'cmd');
+  const agA = agentCard('A', 'エージェントA', 'agent-a/task-basic', '画面とタスクの基本操作（FR-01〜07, 09）',
+    ['画面の骨組み（src/index.html）', '見た目（src/style.css）', '動き（src/app.js）', 'コミット']);
+  const agB = agentCard('B', 'エージェントB', 'agent-b/due-date', '期限機能（FR-01 期限・FR-08）',
+    ['要件 FR-01・FR-08 を確認', 'src/app.js に期限切れ判定を追加', 'src/style.css に赤字表示を追加', '一覧を期限が近い順に並べ替え（独自の改善）', 'コミット']);
+  await sleep(400);
+  const runA = async () => {
+    term('[agent-a] 作業を開始しました', 'dim');
+    agA.doing(0); await writeFile('src/index.html', HTML_SRC, { silent: true }); agA.done(0);
+    agA.doing(1); await writeFile('src/style.css', CSS_SRC, { silent: true }); agA.done(1);
+    agA.doing(2); await writeFile('src/app.js', JS_V1, { silent: true }); agA.done(2);
+    agA.doing(3); await sleep(500);
+    term('[agent-a] git commit -m "画面と基本機能を実装"  (3 files)', 'ok');
+    agA.done(3); agA.finish();
+  };
+  const runB = async () => {
+    await sleep(300);
+    term('[agent-b] 作業を開始しました', 'dim');
+    const stepsB = [1600, 3800, 2600, 3000, 700];
+    const logs = ['[agent-b] Read docs/requirements.md', '[agent-b] Edit src/app.js  +14 −2', '[agent-b] Edit src/style.css  +6', '[agent-b] Edit src/app.js  +3 −1  （並び順を変更）', '[agent-b] git commit -m "期限機能を実装"'];
+    for (let i = 0; i < stepsB.length; i++) {
+      agB.doing(i); await sleep(stepsB[i]);
+      term(logs[i], i === 4 ? 'ok' : 'dim'); agB.done(i);
+    }
+    agB.finish();
+  };
+  await Promise.all([runA(), runB()]);
+  await sleep(400);
+  await note('AIエージェントは**同時に何体でも**動かせます。作業は速くなる一方で、**お互いが何をしているかは知りません。**');
+
+  /* ---------------- フェーズ3：マージ ---------------- */
+  setPhase(2);
+  divider('フェーズ3：マージ');
+  await ai('2体の作業が完了しました。それぞれのブランチを main にマージします。');
+  const mg = tool('Bash', 'git merge（2ブランチ）');
+  term('git switch main && git merge agent-a/task-basic', 'cmd');
+  await sleep(700);
+  term('Fast-forward  src/index.html | src/style.css | src/app.js', 'ok');
+  term('git merge agent-b/due-date', 'cmd');
+  await sleep(900);
+  term('Auto-merging src/style.css', 'dim');
+  term('Auto-merging src/app.js', 'dim');
+  term('CONFLICT (content): Merge conflict in src/app.js', 'ng');
+  term('Automatic merge failed; fix conflicts and then commit the result.', 'ng');
+  mg.done('✗ 競合 1件', true);
+  S.files['src/app.js'].content = JS_CONFLICT;
+  S.files['src/app.js'].conflict = true;
+  openTab('src/app.js');
+  await sleep(500);
+  await ai('**src/app.js で競合（コンフリクト）が発生しました。** 左のエディタで、緑がエージェントA、青がエージェントBの変更です。\n\n2体が**同じ箇所（タスクを追加する処理）を、別々の考えで**書き換えていました。\n\n| | エージェントA | エージェントB |\n|---|---|---|\n| 一覧の並び順 | 新しく登録した順 | 期限が近い順 |\n| 新しいタスクの位置 | 一覧の先頭 | 期限によって変わる |\n\nどちらも**正しく動くコード**なので、AIには「どちらが正しいか」を決める根拠がありません。\n**判断の手がかり：要件定義書 FR-03（一覧表示）**\n\nどちらの変更を採用しますか？');
+  addEl('note', '<b>📄 確認用：</b><button class="btn" data-open="docs/requirements.md">要件定義書を開く</button> <button class="btn" data-open="src/app.js">競合箇所を開く</button>');
+  await note('競合の解消は「どちらのコードが上手いか」ではなく、「**どちらが要件に合っているか**」で決めます。要件を知っているのは人間です。');
+  const mc = await choose([
+    { label: 'エージェントAの変更を採用', text: 'エージェントA（新しく登録した順）の変更を採用してください。' },
+    { label: 'エージェントBの変更を採用', text: 'エージェントB（期限が近い順）の変更を採用してください。' },
+  ]);
+  S.mergeFirst = mc;
+  if (mc === 1) {
+    await thinking('要件定義書と照合しています…', 1200);
+    await ai('ちょっと待ってください。エージェントBの変更を採用すると、**要件定義書 FR-03「登録したタスクを新しい順に一覧表示する」と食い違います。**\n\n- 要件レビューで「新しい順でOK」と承認いただいた項目です\n- 「登録したタスクが一覧の先頭に表示される」というテストも不合格になります\n- 「期限順」はエージェントBが**独自に良かれと思って**加えた変更で、要件にはありません\n\n期限順にしたい場合は、先に**要件定義書を変更する**必要があります。どうしますか？');
+    await note('AIの「良かれと思った改善」が、要件からずれることがあります。**要件を変えるかどうかを決めるのは人間**です。');
+    await choose([
+      { label: '要件どおりAを採用', text: '要件どおり、エージェントA（新しく登録した順）の変更を採用してください。期限順は今後の改善候補にします。' },
+    ]);
+  }
+  await ai(mc === 0
+    ? '承知しました。要件定義書 FR-03（新しい順）とも一致しています。**エージェントAの変更**で競合を解消します。\nエージェントBの「期限順」は、要件にない独自の変更だったため取り込みません。'
+    : '承知しました。**エージェントAの変更**で競合を解消します。期限順の並べ替えは「今後の改善候補」として控えておきます。');
+  const rs = tool('Edit', 'src/app.js（競合を解消）');
+  await sleep(600);
+  S.files['src/app.js'].conflict = false;
+  setFile('src/app.js', JS_V1);
+  openTab('src/app.js');
+  rs.done('✓ 解消');
+  term('git add src/app.js && git commit -m "Merge agent-b/due-date（並び順は FR-03 に従い新しい順）"', 'cmd');
+  await sleep(500);
+  term('[main 4f2c1ad] Merge agent-b/due-date', 'ok');
   const lint = tool('Bash', 'npx eslint src/app.js');
   term('npx eslint src/app.js', 'cmd');
   await sleep(1100);
@@ -1438,30 +1649,59 @@ async function main() {
   term('Ready for changes', 'dim');
   clearAppData();
   $('#preview').classList.add('show');
+  $('.main').classList.add('testing');
   await reloadPreview();
-  pl.done(3);
-  await ai('実装が完了しました。右側のプレビューに、**実際に動くアプリ**が表示されています。\n\n- ファイル：3つ（HTML / CSS / JavaScript）\n- 構文チェック：エラーなし\n\n次は、品質を確認するためのテスト仕様書を作りましょうか？');
-  await note('ここまでの指示は文章だけ。**コードは1行も手で書いていません。**');
-  await choose([
-    { label: 'テスト仕様書を依頼する', text: '要件定義書をもとに、テスト仕様書を作成してください。' },
-    { label: '観点も指定して依頼する', text: '正常系だけでなく、入力ミスなどの異常系も含めたテスト仕様書を作成してください。要件との対応も分かるようにしてください。' },
+  await ai('マージが完了し、実装がそろいました。右側のプレビューに、**実際に動くアプリ**が表示されています。\n\n- ファイル：3つ（HTML / CSS / JavaScript）\n- 構文チェック：エラーなし\n\nただし構文チェックで分かるのは「書き方の誤り」だけです。**要件どおりに動くかどうかまでは保証できません。**以下の確認をお願いします。');
+  const rv2 = await review('src/app.js', '**「動くように見える」と「要件を満たしている」は別物です。**', [
+    { h: '🖱️ 動作確認（右のプレビューで実際に触ってください）', items: [
+      ['タスクの追加・完了・削除ができるか', 'プレビューのアプリはそのまま操作できます'],
+      ['画面の見た目・使い勝手に違和感がないか', 'ボタンの配置や文言はAIの判断で決めています'],
+    ] },
+    { h: '🔐 コードの確認ポイント', items: [
+      ['要件番号（FR-xx）と処理の対応', 'app.js のコメントに、対応する要件番号を記載しています'],
+      ['入力した文字の表示方法', 'textContent で表示し、HTMLとして実行されないようにしています'],
+      ['保存データの扱い', '共有PCでは、同じブラウザを使う他の人にもタスクが見えます'],
+    ] },
+    { h: '🙋 AIからの申告', items: [
+      ['自分で書いたコードの誤りには気付きにくい', 'この後のテストで、要件どおりかを必ず確認してください'],
+    ] },
   ]);
+  await note('ここまでの指示は文章だけ。**コードは1行も手で書いていません。** その代わり、**動かして確かめる**のは人間の責任です。');
+  await choose([
+    { label: 'テスト仕様書を依頼する', text: 'プレビューで動作を確認しました。要件定義書をもとに、テスト仕様書を作成してください。' },
+    { label: '観点も指定して依頼する', text: '動作とコードを確認しました。正常系だけでなく、入力ミスなどの異常系も含めたテスト仕様書を作成してください。要件との対応も分かるようにしてください。' },
+  ]);
+  await rv2.approve();
 
   /* ---------------- フェーズ3：テスト仕様書 ---------------- */
-  setPhase(2);
-  divider('フェーズ3：テスト仕様書');
+  setPhase(3);
+  divider('フェーズ4：テスト仕様書');
   await thinking('要件ごとにテスト観点を洗い出しています…', 1300);
   await writeFile('docs/test-spec.md', TEST_MD);
-  await ai('テスト仕様書を作成しました。\n\n- テストケース **11件**（正常系 9件 / 異常系 2件）\n- 機能要件 FR-01〜FR-09 を**すべてカバー**しています\n- 各ケースに「対応する要件」を記載しました');
-  await note('要件 → テストの対応表があると「**テスト漏れ**」に気付きやすくなります。この作業もAIが得意な分野です。');
-  await choose([
-    { label: '打鍵テストを依頼する', text: 'テスト仕様書の手順どおりに打鍵テストを実施して、結果を仕様書に記入してください。' },
-    { label: '画面を見ながら確認したい', text: '実際にブラウザを操作してテストしてください。操作している様子も見せてください。' },
+  await ai('テスト仕様書を作成しました。\n\n- テストケース **11件**（正常系 9件 / 異常系 2件）\n- 機能要件 FR-01〜FR-09 を**すべてカバー**しています\n- 各ケースに「対応する要件」を記載しました\n\nテストの範囲は**AIの判断で絞った部分**があります。実施前にレビューをお願いします。');
+  const rv3 = await review('docs/test-spec.md', '**テスト観点の抜けは、そのまま品質の抜けになります。**', [
+    { h: '📐 網羅性', items: [
+      ['全要件（FR-01〜09）にテストがあるか', '「要件」列で対応を確認できます'],
+      ['異常系が足りているか', '入力チェック（未入力・空白のみ）の2件を用意しました'],
+    ] },
+    { h: '⚠️ AIの判断で対象外にした観点', items: [
+      ['100文字ちょうど／101文字の境界値テスト', '入力欄の文字数制限（maxlength）に任せたため省略しました'],
+      ['大量データ（数百件）での表示速度', '今回の利用規模では不要と判断しました'],
+    ] },
+    { h: '🔍 期待結果の妥当性', items: [
+      ['期待結果が要件の文言と一致しているか', '例：TC-08 の件数表示の書式、TC-09 のエラー表示'],
+    ] },
   ]);
+  await note('要件 → テストの対応表があると「**テスト漏れ**」に気付きやすくなります。ただし「**何をテストしないか**」を決めるのは人間です。');
+  await choose([
+    { label: '打鍵テストを依頼する', text: 'テスト仕様書をレビューしました。境界値は今回は対象外でOKです。手順どおりに打鍵テストを実施して、結果を仕様書に記入してください。' },
+    { label: '画面を見ながら確認したい', text: '観点はこれでOKです。実際にブラウザを操作してテストしてください。操作している様子も見せてください。' },
+  ]);
+  await rv3.approve();
 
   /* ---------------- フェーズ4：打鍵テスト ---------------- */
-  setPhase(3);
-  divider('フェーズ4：打鍵テスト');
+  setPhase(4);
+  divider('フェーズ5：打鍵テスト');
   await ai('テスト仕様書の手順どおりに、ブラウザを操作してテストします。');
   const tt = tool('Browser', 'docs/test-spec.md（11件）');
   S.firstRun = await runTests('1回目');
@@ -1476,18 +1716,18 @@ async function main() {
     await ai('テストが完了しました。**11件中 ' + S.firstRun.ok + '件がOK、' + S.firstRun.ng + '件がNG**です。\n\n' +
       '**NG：' + ngIds.join('、') + '（入力チェック）**\nタスク名が空でも登録できてしまいます（プレビューに空のタスクが追加されています）。\n\n' +
       '**原因**：`src/app.js` のフォーム送信処理で、タスク名のチェックが実装されていませんでした。要件 **FR-02 の実装漏れ**です。\n```\nform.addEventListener(\'submit\', (e) => {\n  e.preventDefault();\n  addTask(titleInput.value, dueInput.value); // ← チェックなし\n```\n修正してよろしいですか？');
-    await note('**AIが書いたコードにもバグはあります。** だからこそ「要件 → テスト → 確認」の流れが重要です。今回はテストで見つけられました。');
+    await note('**AIが書いたコードにもバグはあります。** 実装レビューでAI自身が申告していたとおりです。「要件 → テスト → 確認」の流れがあったから見つけられました。');
     await choose([
-      { label: '修正と再テストを指示', text: '修正してください。修正後、全件もう一度テストしてください。' },
-      { label: '影響範囲も気にして指示', text: '入力チェックを追加してください。他の機能を壊していないか、全件で回帰テストもお願いします。' },
+      { label: '修正を指示', text: '修正してください。修正したら、変更差分を見せてください。' },
+      { label: '影響範囲も気にして指示', text: '入力チェックを追加してください。他の機能に影響がないか判断したいので、変更差分を見せてください。' },
     ]);
   } else {
     await ai('全件OKでした。');
   }
 
   /* ---------------- フェーズ5：修正・再テスト ---------------- */
-  setPhase(4);
-  divider('フェーズ5：修正・再テスト');
+  setPhase(5);
+  divider('フェーズ6：修正・再テスト');
   await thinking('修正方法を検討しています…', 1100);
   S.diffLines = lineDiff(JS_V1, JS_V2).map((d) => d.t === 'add' ? { ...d, hidden: true } : d);
   const ed = tool('Edit', 'src/app.js');
@@ -1501,8 +1741,26 @@ async function main() {
   term('npx eslint src/app.js', 'cmd');
   await sleep(700);
   term('✔ 問題は見つかりませんでした', 'ok');
-  await ai('修正しました（上が変更差分です。緑が追加した行）。\n\n- 入力値の前後の空白を取り除いてからチェック\n- 空の場合は「タスク名を入力してください」と表示して登録しない\n\n続けて、**全11件の回帰テスト**を実行します。');
-  await sleep(400);
+  await ai('修正しました（左のエディタが変更差分です。緑が追加した行）。\n\n- 入力値の前後の空白を取り除いてからチェック\n- 空の場合は「タスク名を入力してください」と表示して登録しない\n\n回帰テストの前に、差分のレビューをお願いします。');
+  const rv4 = await review('diff:src/app.js', '**修正は、新しいバグの原因にもなります。** 変更内容を確認してから承認してください。', [
+    { h: '🔍 差分の確認', items: [
+      ['変更範囲が送信処理だけに収まっているか', '完了・削除・絞り込みの処理には手を入れていません'],
+      ['エラーメッセージが要件の文言どおりか', 'FR-02「タスク名を入力してください」'],
+    ] },
+    { h: '⚠️ 仕様が変わる点', items: [
+      ['前後の空白を取り除いて登録するようにした', '「 会議 」は「会議」として保存されます。問題ないか判断してください'],
+    ] },
+    { h: '🔁 再発防止', items: [
+      ['他にも要件の実装漏れがないか', '承認後、全11件の回帰テストで確認します'],
+    ] },
+  ]);
+  await note('修正のたびに **差分レビュー → 回帰テスト**。AIの修正も「**人間が確認してから通す**」のが基本です。');
+  await choose([
+    { label: '差分を承認する', text: '差分を確認しました。空白の除去もOKです。全件で回帰テストをしてください。' },
+    { label: '承認して回帰テストを指示', text: '変更範囲に問題ありません。他の機能を壊していないか、全11件で回帰テストしてください。' },
+  ]);
+  await rv4.approve();
+  await ai('承認ありがとうございます。**全11件の回帰テスト**を実行します。');
   const tt2 = tool('Browser', 'docs/test-spec.md（11件・回帰テスト）');
   S.secondRun = await runTests('2回目（回帰テスト）');
   tt2.done('OK ' + S.secondRun.ok + ' / NG ' + S.secondRun.ng, S.secondRun.ng > 0);
@@ -1516,7 +1774,7 @@ async function main() {
   ]);
 
   /* ---------------- 完成 ---------------- */
-  setPhase(6);
+  setPhase(7);
   setLive('done');
   S.finishedAt = Date.now();
   await ai('成果物の一覧をまとめました。プレビューのアプリは、そのまま自由に触っていただけます。');
@@ -1540,14 +1798,15 @@ function showSummary() {
     '<div class="stats">' +
       '<div class="stat"><div class="v">' + S.instructions + '<small>回</small></div><div class="l">あなたが出した指示</div></div>' +
       '<div class="stat"><div class="v">' + S.genLines + '<small>行</small></div><div class="l">AIが書いた文書・コード</div></div>' +
+      '<div class="stat"><div class="v">' + S.reviewItems + '<small>項目</small></div><div class="l">あなたがレビューした観点（' + S.reviews + '回）</div></div>' +
       '<div class="stat"><div class="v">' + TESTS.length + '<small>件</small></div><div class="l">テスト（初回NG ' + (S.firstRun ? S.firstRun.ng : 0) + '件 → 修正後すべてOK）</div></div>' +
       '<div class="stat"><div class="v">' + time + '</div><div class="l">所要時間</div></div>' +
     '</div>' +
     '<div class="roles">' +
-      '<div class="role h"><h3>👤 人間がやったこと</h3><ul><li>作りたい物・目的を伝えた</li><li>AIの質問に答えた</li><li>要件定義書をレビューしてOKを出した</li><li>バグの修正と再テストを指示した</li></ul></div>' +
-      '<div class="role a"><h3>🤖 AIがやったこと</h3><ul><li>要件の整理と文書化</li><li>HTML / CSS / JavaScript の実装</li><li>要件に対応したテスト仕様書の作成</li><li>打鍵テスト・原因調査・修正・回帰テスト</li></ul></div>' +
+      '<div class="role h"><h3>👤 人間がやったこと</h3><ul><li>作りたい物・目的を伝えた</li><li>AIの質問に答えた</li><li><b>要件・実装・テスト仕様書・修正差分をレビューして承認した</b></li><li>AIが推測で決めた点・テストしない範囲を判断した</li><li><b>エージェント同士の競合で、どちらが正しいかを判断した</b></li><li>バグの修正と再テストを指示した</li></ul></div>' +
+      '<div class="role a"><h3>🤖 AIがやったこと</h3><ul><li>要件の整理と文書化</li><li>2体のエージェントで並列に実装</li><li>マージと競合の検出・解消</li><li>要件に対応したテスト仕様書の作成</li><li>打鍵テスト・原因調査・修正・回帰テスト</li></ul></div>' +
     '</div>' +
-    '<div class="msgline"><b>ポイント：</b>AIは速く大量に作れますが、間違えることもあります。<br>「何を作るか決める」「出来上がった物を確認する」のは、これからも人間の大事な役割です。</div>' +
+    '<div class="msgline"><b>ポイント：</b>AIは速く大量に作れますが、<b>推測で補ったり、間違えたりもします</b>。<br>作業のたびにレビューして承認する ―― 「何を作るか決める」「出来上がった物に責任を持つ」のは、これからも人間の役割です。</div>' +
     '<h2>成果物</h2>' +
     '<table class="deliv">' + files.map((f) => '<tr><td>' + f[2] + ' ' + f[1] + '</td><td><code style="font-family:var(--mono);color:var(--muted)">' + f[0] + '</code></td><td><button class="btn" data-open="' + f[0] + '">開く</button> <button class="btn" data-dl="' + f[0] + '">保存</button></td></tr>').join('') + '</table>' +
     '<div class="actions">' +
