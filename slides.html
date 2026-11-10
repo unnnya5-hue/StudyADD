@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI駆動開発 入門</title>
+<style>
+:root{
+  --bg:#0f1115; --paper:#ffffff; --ink:#151821; --sub:#5b6170; --line:#e3e6ec; --soft:#f4f6fa;
+  --accent:#3a63d8; --accent2:#7c4ddb; --warn:#c2410c; --ok:#15803d; --ng:#dc2626;
+  --sans:"Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","BIZ UDPGothic","Meiryo",system-ui,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"BIZ UDGothic",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--sans);color:var(--ink)}
+#stage{position:absolute;left:0;top:0;width:100%;height:100%}
+.slide{position:absolute;left:0;top:0;width:1280px;height:720px;background:var(--paper);transform-origin:0 0;padding:64px 80px 56px;display:none;overflow:hidden}
+.slide.on{display:block}
+.slide::after{content:"";position:absolute;left:0;top:0;width:100%;height:8px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.pg{position:absolute;right:40px;bottom:24px;font-size:16px;color:#9aa0ab}
+.foot{position:absolute;left:80px;bottom:24px;font-size:15px;color:#9aa0ab}
+.kicker{font-size:20px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:10px}
+h1{font-size:46px;line-height:1.3;margin:0 0 28px}
+h2{font-size:24px;margin:0 0 12px}
+p{margin:0}
+.lead{font-size:26px;line-height:1.7;color:#2a2f3a}
+.big{font-size:30px;line-height:1.7}
+ul.pt{margin:0;padding:0;list-style:none}
+ul.pt li{position:relative;padding-left:36px;font-size:27px;line-height:1.6;margin:0 0 16px}
+ul.pt li::before{content:"";position:absolute;left:6px;top:.62em;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+b,.em{color:var(--accent)}
+.warn{color:var(--warn)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:26px 28px}
+.card h2{display:flex;align-items:center;gap:10px}
+.card p,.card li{font-size:23px;line-height:1.6;color:#2a2f3a}
+.card ul{margin:6px 0 0;padding-left:26px}
+.card.h{border-top:6px solid #e0a100}
+.card.a{border-top:6px solid var(--accent)}
+.tbl{width:100%;border-collapse:collapse;font-size:23px}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:14px 16px;text-align:left;vertical-align:top}
+.tbl th{font-size:19px;color:var(--sub);font-weight:700;background:var(--soft)}
+.tbl td:first-child{font-weight:700;white-space:nowrap}
+.arrow{color:var(--accent);font-weight:800}
+/* title */
+.title{background:linear-gradient(135deg,#141a2e,#2a2050);color:#fff;display:none;flex-direction:column;justify-content:center}
+.title.on{display:flex}
+.title h1{font-size:68px;color:#fff;margin:0 0 18px}
+.title .sub{font-size:30px;color:#c9cff5}
+.title .meta{margin-top:60px;font-size:20px;color:#9aa3cf}
+.title .badge{display:inline-block;font-size:20px;font-weight:700;color:#141a2e;background:linear-gradient(90deg,#9db4ff,#c9a8ff);padding:6px 16px;border-radius:999px;margin-bottom:26px;align-self:flex-start}
+/* flow */
+.flow{display:flex;gap:10px;align-items:stretch;margin:26px 0 30px}
+.flow .f{flex:1;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:16px 10px;text-align:center}
+.flow .f .e{font-size:34px}
+.flow .f b{display:block;color:var(--ink);font-size:20px;margin-top:4px}
+.flow .f small{display:block;color:var(--sub);font-size:15px;margin-top:4px;line-height:1.4}
+.flow .f.hl{border:2px solid var(--accent);background:#eef2fd}
+.url{font-family:var(--mono);font-size:30px;background:#141a2e;color:#fff;border-radius:14px;padding:18px 26px;display:inline-block}
+.btn{display:inline-block;margin-left:16px;font-size:22px;font-weight:700;color:#fff;background:var(--accent);padding:14px 24px;border-radius:12px;text-decoration:none;vertical-align:middle}
+.quote{font-size:40px;line-height:1.6;font-weight:800;text-align:center;margin:40px 0 20px}
+.quote .a{color:var(--accent)}.quote .h{color:#c27c00}
+.rules{display:grid;gap:12px}
+.rule{display:flex;align-items:center;gap:22px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:14px 22px}
+.rule .no{flex:none;width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center}
+.rule b{flex:none;width:300px;color:var(--ink);font-size:25px}
+.rule span{font-size:21px;color:#3d4350;line-height:1.5}
+.tmpl{font-family:var(--mono);font-size:22px;line-height:1.9;background:#141a2e;color:#e7eaf3;border-radius:14px;padding:20px 28px;white-space:pre-wrap}
+.tmpl .k{color:#ffcf6b}
+.callout{margin-top:26px;background:#fff7e6;border-left:6px solid #e0a100;border-radius:10px;padding:16px 22px;font-size:23px;line-height:1.6}
+.mini{font-size:19px;color:var(--sub)}
+.cf{font-family:var(--mono);font-size:19px;line-height:1.65;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.cf div{padding:0 18px;white-space:pre}
+.cf .o{background:#e7f6ec}.cf .t{background:#e8eefc}.cf .m{background:#d9dde5;font-weight:700}
+.res{display:inline-block;font-weight:800;font-size:18px;padding:2px 12px;border-radius:999px}
+.res.ok{background:#dcfce7;color:var(--ok)}.res.ng{background:#fee2e2;color:var(--ng)}
+
+/* UI */
+#bar{position:fixed;left:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s;z-index:5}
+#notes{position:fixed;left:0;right:0;bottom:0;max-height:34%;overflow:auto;background:#1b1f29;color:#e4e7ee;border-top:1px solid #333a4a;padding:14px 24px 18px;font-size:16px;line-height:1.7;display:none;z-index:4}
+#notes.on{display:block}
+#notes .h{font-size:12px;letter-spacing:.1em;color:#8f97aa;margin-bottom:4px;display:flex;justify-content:space-between}
+#notes ul{margin:0;padding-left:20px}
+#help{position:fixed;right:12px;top:10px;z-index:6;display:flex;gap:6px;opacity:.2;transition:opacity .2s}
+#help:hover{opacity:1}
+#help button{font:12px var(--sans);color:#c7ccd8;background:rgba(40,44,56,.85);border:1px solid #3b4252;border-radius:7px;padding:4px 10px;cursor:pointer}
+#help button:hover{color:#fff}
+.nav{position:fixed;top:0;bottom:0;width:18%;z-index:3;cursor:pointer}
+.nav.l{left:0}.nav.r{right:0}
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;height:auto;background:#fff}
+  #stage{position:static}
+  .slide,.title{display:block!important;position:relative;transform:none!important;page-break-after:always;break-after:page}
+  .title{display:flex!important}
+  #notes,#help,#bar,.nav{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- 1 -->
+<section class="slide title" data-notes="
+- 今日は資料で説明するより、実際に体験してもらうのが早いので、デモ中心で進めます
+- 前提知識は不要。プログラミング経験がなくても分かる内容です
+- 目安：全体で20〜25分（デモ約8分＋説明・質疑）">
+  <span class="badge">チーム勉強会</span>
+  <h1>AI駆動開発 入門</h1>
+  <div class="sub">選択肢を選ぶだけで「作る → 確かめる」までを体験する</div>
+  <div class="meta">要件定義 ／ 並列実装 ／ マージ ／ テスト ／ 修正</div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-notes="
+- ゴールは3つだけ。細かい技術の話はしません
+- 「自分の仕事のどこに使えそうか」を考えながら見てもらえるとうれしい">
+  <div class="kicker">TODAY</div>
+  <h1>今日持ち帰ってほしいこと</h1>
+  <ul class="pt">
+    <li><b>AI駆動開発とは何か</b>をざっくり理解する</li>
+    <li>AIと人間の<b>役割分担</b>がどう変わるかを体験する</li>
+    <li>明日から<b>小さく試せること</b>を1つ見つける</li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-notes="
+- 一言でいうと「作る作業はAI、決める・確かめるは人間」
+- AIが全部やってくれる、という話ではない点を最初に強調
+- 人間の仕事がなくなるのではなく、中身が変わる">
+  <div class="kicker">WHAT IS</div>
+  <h1>AI駆動開発とは</h1>
+  <p class="lead" style="margin-bottom:30px">文書作成・コーディング・テストといった<b>「作る作業」をAIに任せ</b>、人間は<b>「何を作るか決める」「出来上がった物を確かめる」</b>ことに集中する開発の進め方</p>
+  <div class="grid2">
+    <div class="card h"><h2>👤 人間の仕事</h2><p>目的を伝える ／ 判断する ／ レビューする ／ 品質と結果に責任を持つ</p></div>
+    <div class="card a"><h2>🤖 AIの仕事</h2><p>文書化する ／ コードを書く ／ テストする ／ 原因を調べて直す ／ 何度でも繰り返す</p></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-notes="
+- 工程はこれまでと同じ。変わるのは各工程での人間の動き方
+- 「書く人」から「読んで判断する人」へ
+- 作業時間が減った分、レビューと判断の質が成果物の質を決める">
+  <div class="kicker">CHANGE</div>
+  <h1>人間の仕事はどう変わる？</h1>
+  <table class="tbl">
+    <tr><th>工程</th><th>これまで</th><th></th><th>AI駆動開発</th></tr>
+    <tr><td>要件定義</td><td>要件定義書を書く</td><td class="arrow">→</td><td>目的を伝え、AIの<b>推測部分をレビュー</b>する</td></tr>
+    <tr><td>実装</td><td>コードを書く</td><td class="arrow">→</td><td>作業を分けて任せ、<b>食い違いを判断</b>する</td></tr>
+    <tr><td>テスト</td><td>仕様書を書き、手で打鍵する</td><td class="arrow">→</td><td><b>テストする範囲を決め</b>、結果を確認する</td></tr>
+    <tr><td>修正</td><td>原因を調べて直す</td><td class="arrow">→</td><td>修正の<b>差分を見て承認</b>する</td></tr>
+  </table>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-notes="
+- ここでデモに切り替え（ボタンで別タブが開く）
+- 速度は1x推奨。時間が押したら右上で2xに、または Space で演出スキップ
+- 選択肢は会場に「どっちにする？」と聞いて選ぶと盛り上がる
+- デモ中は各場面の黄色い「解説」を読み上げればOK">
+  <div class="kicker">DEMO</div>
+  <h1>体験デモ：チームTODOアプリを作る</h1>
+  <div class="flow">
+    <div class="f"><div class="e">📝</div><b>要件定義</b><small>AIの質問に答える</small></div>
+    <div class="f"><div class="e">🤖🤖</div><b>並列実装</b><small>2体のAIが分担</small></div>
+    <div class="f"><div class="e">🔀</div><b>マージ</b><small>競合を人間が判断</small></div>
+    <div class="f"><div class="e">📋</div><b>テスト仕様書</b><small>観点をレビュー</small></div>
+    <div class="f"><div class="e">🖱️</div><b>打鍵テスト</b><small>AIが画面を操作</small></div>
+    <div class="f"><div class="e">🔧</div><b>修正・再テスト</b><small>差分を承認</small></div>
+  </div>
+  <p class="lead" style="margin-bottom:22px">人間がやるのは<b>選択肢から指示を選ぶことだけ</b>。コードは1行も書きません。</p>
+  <span class="url">unnnya5-hue.github.io/StudyADD/</span><a class="btn" href="index.html" target="_blank" rel="noopener">▶ デモを開く</a>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-notes="
+- デモ後の振り返り①。要件定義の場面を思い出してもらう
+- AIはいきなり作らず、まず質問してきた
+- それでも指示にない部分は推測で埋めている → だからレビュー依頼が出た
+- 例：上限100文字、新しい順の表示 … 誰も指定していない">
+  <div class="kicker">LOOK BACK 1</div>
+  <h1>要件定義：AIは「推測で補う」</h1>
+  <div class="grid2">
+    <div class="card a"><h2>🤖 AIがしたこと</h2><ul><li>不明点を<b>質問</b>してきた</li><li>数十秒で要件定義書を作成</li><li>指示にない部分は<b>推測で補った</b></li></ul></div>
+    <div class="card h"><h2>👤 人間がしたこと</h2><ul><li>目的と前提を伝えた</li><li>「AIが仮定で決めた点」を<b>レビュー</b></li><li>運用に合うかを判断した</li></ul></div>
+  </div>
+  <div class="callout">💡 AIの成果物は「<b>それらしく見える</b>」のが落とし穴。推測で決めた所を見極めるのがレビューの役目</div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-notes="
+- 振り返り②。今回の一番の見どころ
+- 2体のAIは並行して速く作れるが、お互いの判断を知らない
+- Bは良かれと思って期限順にした。どちらのコードも動く
+- 決め手はコードの出来ではなく要件定義書（FR-03 新しい順）
+- 要件を文書に残しておく意味がここで効いてくる">
+  <div class="kicker">LOOK BACK 2</div>
+  <h1>並列実装とマージ：判断の基準は「要件」</h1>
+  <div class="grid2" style="align-items:start">
+    <div class="cf">
+      <div class="m">&lt;&lt;&lt;&lt;&lt;&lt;&lt; エージェントA</div>
+      <div class="o">  tasks.unshift(...)   // 新しい順</div>
+      <div class="m">=======</div>
+      <div class="t">  tasks.push(...)</div>
+      <div class="t">  tasks.sort(...)      // 期限が近い順</div>
+      <div class="m">&gt;&gt;&gt;&gt;&gt;&gt;&gt; エージェントB</div>
+    </div>
+    <ul class="pt">
+      <li>AIを並列で動かすと<b>速い</b></li>
+      <li>でも<b>お互いの判断を知らない</b></li>
+      <li>どちらも「動くコード」<br>→ AIには決められない</li>
+      <li>決め手は<b>要件定義書</b></li>
+    </ul>
+  </div>
+  <div class="callout">💡 Bの「期限順」は要件にない<b>良かれと思った改善</b>。要件を変えるかどうかを決めるのは人間</div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-notes="
+- 振り返り③。AIが書いたコードにもバグはある
+- 構文チェックは通っていた＝「動く」と「正しい」は別
+- テストで見つけ、差分をレビューして、全件をテストし直した
+- テスト仕様書の1回目NGは消さずに履歴として残している点にも触れる">
+  <div class="kicker">LOOK BACK 3</div>
+  <h1>テスト：AIのコードにもバグはある</h1>
+  <table class="tbl" style="margin-bottom:24px">
+    <tr><th>テスト</th><th>内容</th><th>1回目</th><th>2回目（修正後）</th></tr>
+    <tr><td>TC-01〜08</td><td>登録・完了・絞り込み・削除・期限・件数</td><td><span class="res ok">OK</span></td><td><span class="res ok">OK</span></td></tr>
+    <tr><td>TC-09, 10</td><td>未入力・空白だけのタスク名を弾く（FR-02）</td><td><span class="res ng">NG</span></td><td><span class="res ok">OK</span></td></tr>
+    <tr><td>TC-11</td><td>再読み込み後もデータが残る</td><td><span class="res ok">OK</span></td><td><span class="res ok">OK</span></td></tr>
+  </table>
+  <ul class="pt">
+    <li>構文チェックは通っていた → <b>動く ≠ 要件どおり</b></li>
+    <li>修正は新しいバグの種 → <b>差分レビュー＋全件の回帰テスト</b></li>
+  </ul>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-notes="
+- デモで人間がしたことを整理
+- どれもキーボードでコードを書く作業ではない
+- ただし、どれもAIには任せられない仕事">
+  <div class="kicker">ROLES</div>
+  <h1>デモで人間がやったこと</h1>
+  <div class="grid3">
+    <div class="card"><h2>🗣 伝える</h2><p>作りたい物と目的、前提・制約を伝えた</p></div>
+    <div class="card"><h2>🔍 確かめる</h2><p>要件・実装・テスト仕様書・修正差分の<b>4回レビュー</b></p></div>
+    <div class="card"><h2>⚖️ 決める</h2><p>競合の採用、テストしない範囲、修正の承認</p></div>
+  </div>
+  <div class="quote"><span class="a">AIは「速く作る」</span>のが得意<br><span class="h">人間は「正しく決める」</span>のが役割</div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-notes="
+- デモから引き出せる原則を5つに整理
+- 特に3（毎回レビュー）と4（テストで確かめる）はデモで実感できたはず
+- 5は社内での使い方として一番大事">
+  <div class="kicker">PRINCIPLES</div>
+  <h1>うまく進めるための5つの原則</h1>
+  <div class="rules">
+    <div class="rule"><div class="no">1</div><b>目的と背景を伝える</b><span>「何を」だけでなく「なぜ」を伝えると提案の質が上がる</span></div>
+    <div class="rule"><div class="no">2</div><b>要件を文書に残す</b><span>AIへの指示書であり、迷った時の判断の拠り所</span></div>
+    <div class="rule"><div class="no">3</div><b>毎回レビューする</b><span>推測・対象外にした判断・独自の改善を探す</span></div>
+    <div class="rule"><div class="no">4</div><b>テストで確かめる</b><span>動く ≠ 正しい。修正後は全件の回帰テスト</span></div>
+    <div class="rule"><div class="no">5</div><b>責任は人間が持つ</b><span>何を作り、何を出すかは人間が決める</span></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-notes="
+- 社内で使う上での注意点。ここはしっかり伝える
+- 1番目は社内ルールに必ず従う（利用可能なツール・入力してよい情報の範囲）
+- ※社内のAI利用ガイドラインがあれば、ここで名前や窓口を紹介する">
+  <div class="kicker">CAUTION</div>
+  <h1>⚠️ 注意しておきたいこと</h1>
+  <ul class="pt">
+    <li><b class="warn">機密情報・個人情報を入力しない</b><br><span class="mini">社内のAI利用ルールに従い、許可されたツールと範囲で使う</span></li>
+    <li><b class="warn">もっともらしい誤りに注意</b><br><span class="mini">自信ありげな出力でも間違っていることがある</span></li>
+    <li><b class="warn">「良かれと思った改善」に注意</b><br><span class="mini">頼んでいない変更が入っていないか、差分で確認する</span></li>
+    <li><b class="warn">セキュリティ・ライセンスの確認</b><br><span class="mini">生成されたコードも、人が書いたコードと同じ基準でチェックする</span></li>
+  </ul>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-notes="
+- いきなり開発全体に使うのではなく、確認しやすい小さな作業から
+- 依頼の型は、デモの最初の指示を分解したもの
+- 「不明点があれば先に質問して」と一言添えるだけで結果が変わる">
+  <div class="kicker">NEXT STEP</div>
+  <h1>明日から始める3ステップ</h1>
+  <div class="grid2" style="grid-template-columns:1fr 1.1fr;align-items:start">
+    <ul class="pt">
+      <li><b>小さな作業から試す</b><br><span class="mini">議事録の要約、テスト観点の洗い出し、既存コードの説明 など</span></li>
+      <li><b>依頼の「型」を決める</b><br><span class="mini">目的・前提・制約・出力形式をそろえる</span></li>
+      <li><b>レビュー観点を共有する</b><br><span class="mini">「AIの成果物のどこを見るか」をチェックリストに</span></li>
+    </ul>
+    <div>
+      <p class="mini" style="margin-bottom:8px">依頼の型（デモの最初の指示を分解すると）</p>
+      <div class="tmpl"><span class="k">【目的】</span>タスクの抜け漏れを防ぎたい
+<span class="k">【作る物】</span>TODOアプリの要件定義書
+<span class="k">【前提・制約】</span>サーバーなし／共有不要
+　　　　　　　期限を設定したい
+<span class="k">【出力形式】</span>機能要件はID付きの表で
+<span class="k">【お願い】</span>不明点は作成前に質問して</div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="slide title" data-notes="
+- 最後に一言でまとめて質疑へ
+- デモURLは共有済み。各自で触ってみてもらう（1人でも最後まで進められる）
+- 完成画面の「入門まとめ」は印刷・PDF保存できるので、復習用に">
+  <span class="badge">まとめ</span>
+  <h1>作るのはAI、決めるのは人間</h1>
+  <div class="sub">「伝える・確かめる・決める」の質が、成果物の質を決める</div>
+  <div class="meta">デモ：unnnya5-hue.github.io/StudyADD/　｜　ご質問・ご意見をどうぞ</div>
+</section>
+
+</div>
+
+<div class="nav l" id="navL" title="前へ"></div>
+<div class="nav r" id="navR" title="次へ"></div>
+<div id="help">
+  <button id="bNotes" title="話すポイントの表示切替（N）">📝 メモ (N)</button>
+  <button id="bFull" title="全画面（F）">⛶ 全画面 (F)</button>
+  <button id="bPrint" title="印刷・PDF保存">🖨 PDF</button>
+</div>
+<div id="notes"><div class="h"><span>話すポイント（発表者用・スライドには映りません）</span><span id="nPg"></span></div><div id="nBody"></div></div>
+<div id="bar"></div>
+
+<script>
+'use strict';
+const slides = [...document.querySelectorAll('.slide')];
+const notes = document.getElementById('notes');
+let cur = 0;
+try { const h = parseInt(location.hash.slice(1), 10); if (h >= 1 && h <= slides.length) cur = h - 1; } catch (e) { /* noop */ }
+
+slides.forEach((s, i) => {
+  if (i > 0) { const pg = document.createElement('div'); pg.className = 'pg'; pg.textContent = (i + 1) + ' / ' + slides.length; s.appendChild(pg); }
+});
+
+function esc(t) { return t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+function fit() {
+  const nh = notes.classList.contains('on') ? notes.offsetHeight : 0;
+  const W = window.innerWidth, H = window.innerHeight - nh;
+  const sc = Math.min(W / 1280, H / 720);
+  const x = (W - 1280 * sc) / 2, y = Math.max(0, (H - 720 * sc) / 2);
+  slides.forEach((s) => { s.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + sc + ')'; });
+}
+function show(i) {
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+  const raw = (slides[cur].dataset.notes || '').trim().split('\n').map((l) => l.trim()).filter(Boolean);
+  document.getElementById('nBody').innerHTML = '<ul>' + raw.map((l) => '<li>' + esc(l.replace(/^- /, '')) + '</li>').join('') + '</ul>';
+  document.getElementById('nPg').textContent = (cur + 1) + ' / ' + slides.length;
+  document.getElementById('bar').style.width = ((cur + 1) / slides.length * 100) + '%';
+  try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) { /* noop */ }
+  fit();
+}
+function toggleNotes() { notes.classList.toggle('on'); fit(); }
+function full() {
+  try { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); } catch (e) { /* noop */ }
+}
+document.addEventListener('keydown', (e) => {
+  if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(cur + 1); }
+  else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(cur - 1); }
+  else if (e.key === 'Home') show(0);
+  else if (e.key === 'End') show(slides.length - 1);
+  else if (e.key === 'n' || e.key === 'N') toggleNotes();
+  else if (e.key === 'f' || e.key === 'F') full();
+});
+document.getElementById('navL').addEventListener('click', () => show(cur - 1));
+document.getElementById('navR').addEventListener('click', () => show(cur + 1));
+document.getElementById('bNotes').addEventListener('click', toggleNotes);
+document.getElementById('bFull').addEventListener('click', full);
+document.getElementById('bPrint').addEventListener('click', () => window.print());
+let tx = null;
+document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', (e) => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); tx = null; });
+window.addEventListener('resize', fit);
+show(cur);
+</script>
+</body>
+</html>
