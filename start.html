@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>やってみようガイド</title>
+<style>
+:root{
+  --bg:#f5f7fb; --paper:#fff; --ink:#151821; --sub:#5b6170; --line:#e3e6ec; --soft:#f4f6fa;
+  --accent:#3a63d8; --accent2:#7c4ddb; --warn:#c2410c; --ok:#15803d; --code:#141a2e;
+  --sans:"Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","BIZ UDPGothic","Meiryo",system-ui,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"BIZ UDGothic",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8}
+a{color:var(--accent)}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 80px}
+header.hero{background:linear-gradient(135deg,#141a2e,#2a2050);color:#fff;padding:48px 16px 40px}
+header.hero .in{max-width:960px;margin:0 auto}
+.badge{display:inline-block;font-size:13px;font-weight:700;color:#141a2e;background:linear-gradient(90deg,#9db4ff,#c9a8ff);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+header.hero h1{font-size:34px;line-height:1.35;margin:0 0 10px}
+header.hero p{margin:0;color:#c9cff5;font-size:17px}
+.toplinks{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.toplinks a{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:6px 12px;font-size:14px;text-decoration:none}
+nav.toc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:-22px 0 28px;position:relative;box-shadow:0 6px 20px rgba(20,26,46,.06)}
+nav.toc b{font-size:13px;color:var(--sub);letter-spacing:.06em}
+nav.toc ol{margin:6px 0 0;padding-left:22px;columns:2;column-gap:28px}
+nav.toc li{break-inside:avoid}
+section.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 28px;margin:0 0 22px}
+section.card>h2{font-size:23px;margin:0 0 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.no{flex:none;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:17px;font-weight:800;display:grid;place-items:center}
+.prog{margin-left:auto;font-size:13px;font-weight:700;color:var(--sub);background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:2px 12px}
+.prog.full{color:var(--ok);background:#dcfce7;border-color:#bbf7d0}
+.lead{color:var(--sub);margin:0 0 14px}
+h3{font-size:18px;margin:22px 0 8px}
+p{margin:0 0 10px}
+.courses{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 4px}
+.course{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--soft)}
+.course.main{border:2px solid var(--accent);background:#eef2fd}
+.course h3{margin:0 0 6px}
+.course ul{margin:0;padding-left:20px;font-size:15px}
+.tag{display:inline-block;font:700 12px var(--mono);color:var(--accent);background:#eef2fd;border:1px solid #c7d4f7;border-radius:6px;padding:0 7px;vertical-align:2px}
+.tag.free{color:var(--ok);background:#ecfdf3;border-color:#bbf7d0}
+.tag.paid{color:var(--warn);background:#fff4ec;border-color:#fed7aa}
+ul.check{list-style:none;margin:6px 0 0;padding:0}
+ul.check li{margin:0 0 6px}
+ul.check label{display:flex;gap:12px;align-items:flex-start;cursor:pointer;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;transition:background .15s}
+ul.check label:hover{background:var(--soft)}
+ul.check input{flex:none;width:20px;height:20px;margin-top:4px;accent-color:var(--ok)}
+ul.check input:checked + span{color:var(--sub)}
+ul.check input:checked + span b{color:var(--ok)}
+ul.check small{display:block;color:var(--sub);font-size:14px;line-height:1.6}
+.warnbox{background:#fff7e6;border-left:5px solid #e0a100;border-radius:8px;padding:12px 16px;margin:12px 0}
+.okbox{background:#ecfdf3;border-left:5px solid var(--ok);border-radius:8px;padding:12px 16px;margin:12px 0}
+.tipbox{background:#eef2fd;border-left:5px solid var(--accent);border-radius:8px;padding:12px 16px;margin:12px 0}
+.warnbox p:last-child,.okbox p:last-child,.tipbox p:last-child{margin:0}
+.code{position:relative;margin:8px 0 12px}
+.code .lb{font-size:12px;color:var(--sub);font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:8px}
+.code pre{margin:0;background:var(--code);color:#e7eaf3;border-radius:10px;padding:14px 16px;font:14.5px/1.75 var(--mono);white-space:pre-wrap;word-break:break-word}
+.code.prompt pre{background:#1f2540;border:1px solid #3b4470;font-family:var(--sans);font-size:15px}
+.copy{margin-left:auto;font:12px var(--sans);font-weight:700;color:var(--accent);background:#fff;border:1px solid #c7d4f7;border-radius:7px;padding:3px 10px;cursor:pointer}
+.copy.done{color:var(--ok);border-color:#bbf7d0}
+.os{display:flex;gap:6px;margin:6px 0 2px;flex-wrap:wrap}
+.os button{font:13px var(--sans);font-weight:700;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 12px;cursor:pointer}
+.os button.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+.ospane{display:none}.ospane.on{display:block}
+kbd{font:13px var(--mono);background:#fff;border:1px solid #c9ced8;border-bottom-width:2px;border-radius:5px;padding:0 6px}
+code.i{font:14px var(--mono);background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:0 5px}
+.step{border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:14px 0;background:#fff}
+.step>h3{margin:0 0 6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.step>h3 .ph{font-size:12px;font-weight:700;color:#fff;background:var(--accent);border-radius:6px;padding:1px 8px}
+.demo{font-size:13px;color:var(--sub)}
+table.t{width:100%;border-collapse:collapse;font-size:15px;margin:8px 0}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13px;color:var(--sub)}
+.dl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:10px 0}
+.dl .f{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--soft);display:flex;flex-direction:column;gap:6px}
+.dl .f b{font-family:var(--mono);font-size:14px}
+.dl .f span{font-size:14px;color:var(--sub);flex:1}
+.btn{font:14px var(--sans);font-weight:700;color:#fff;background:var(--accent);border:0;border-radius:9px;padding:8px 14px;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+.btn.sub{color:var(--accent);background:#fff;border:1px solid #c7d4f7}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;background:#fff}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{margin-bottom:6px}
+.foot{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:28px}
+.small{font-size:14px;color:var(--sub)}
+@media (max-width:720px){
+  header.hero h1{font-size:26px}
+  nav.toc ol{columns:1}
+  .courses,.dl{grid-template-columns:1fr}
+  section.card{padding:18px 16px}
+}
+@media print{
+  body{background:#fff;font-size:12.5px}
+  header.hero{padding:20px 16px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  nav.toc,.copy,.os,.foot,.toplinks,.dl .btn{display:none!important}
+  .ospane{display:block!important}
+  section.card{break-inside:auto;border:1px solid #ccc}
+  .step,.code{break-inside:avoid}
+  .code pre{background:#f4f6fa!important;color:#111!important;border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+
+<header class="hero"><div class="in">
+  <span class="badge">AI駆動開発 体験デモの続き</span>
+  <h1>🚀 やってみようガイド<br>自分のPCでAI駆動開発を試す</h1>
+  <p>デモで体験した「要件定義 → 計画 → 実装 → テスト → 修正」を、本物のAIでなぞってみましょう。</p>
+  <div class="toplinks"><a href="index.html">▶ 体験デモ</a><a href="slides.html">📊 発表スライド</a><a href="#" id="printTop">🖨 印刷・PDF保存</a></div>
+</div></header>
+
+<div class="wrap">
+
+<nav class="toc"><b>もくじ</b>
+  <ol>
+    <li><a href="#s1">はじめに：2つのコース</a></li>
+    <li><a href="#s2">始める前のチェックリスト</a></li>
+    <li><a href="#s3">準備：Claude Code を入れる</a></li>
+    <li><a href="#s4">ハンズオン：TODOアプリを作る</a></li>
+    <li><a href="#s5">Skill を作って使い回す</a></li>
+    <li><a href="#s6">無料で試すコース</a></li>
+    <li><a href="#s7">困ったときは</a></li>
+    <li><a href="#s8">スターターキット（ダウンロード）</a></li>
+  </ol>
+</nav>
+
+<!-- 1 -->
+<section class="card" id="s1">
+  <h2><span class="no">1</span>はじめに：2つのコース</h2>
+  <p class="lead">このガイドは<b>私用PC・個人のアカウント</b>で、<b>練習用の題材</b>を使って試すことを前提にしています。</p>
+  <div class="courses">
+    <div class="course main">
+      <h3>A. しっかりコース <span class="tag paid">有料プラン</span></h3>
+      <ul>
+        <li>Claude Code を使い、デモと同じTODOアプリを<b>実際に作る</b></li>
+        <li>Plan mode・SubAgent・Skill も体験できる</li>
+        <li>所要時間：<b>1.5〜2時間</b>（準備30分＋作業）</li>
+        <li>必要なもの：Claude の Pro 以上のプラン</li>
+      </ul>
+    </div>
+    <div class="course">
+      <h3>B. お試しコース <span class="tag free">無料</span></h3>
+      <ul>
+        <li>インストール不要。ブラウザのチャットで試す</li>
+        <li>要件定義書・テスト仕様書づくりとレビューを体験</li>
+        <li>所要時間：<b>30分</b></li>
+        <li>必要なもの：Claude の無料アカウント</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small" style="margin-top:10px">どちらのコースも、まず <a href="#s2">2. チェックリスト</a> を確認してください。B コースの人は 3〜5 を飛ばして <a href="#s6">6</a> へ進めます。チェックした内容はこのブラウザに保存されます。</p>
+</section>
+
+<!-- 2 -->
+<section class="card" id="s2">
+  <h2><span class="no">2</span>始める前のチェックリスト<span class="prog" data-prog="pre"></span></h2>
+  <p class="lead">いちばん大事なページです。<b>すべてにチェックが付いてから</b>始めましょう。</p>
+  <h3>🔒 情報の扱い</h3>
+  <ul class="check" data-group="pre">
+    <li><label><input type="checkbox" data-k="pre-1"><span><b>会社の情報を私用PCやAIに入れない</b><small>ソースコード、資料、顧客・取引先の情報、社内システムの名前などは使わない。題材はこのガイドのTODOアプリにする</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-2"><span><b>個人のアカウント（私用のメールアドレス）で登録する</b><small>会社のメールアドレスやアカウントは使わない</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-3"><span><b>就業規則など、社内のルールに反しないことを確認した</b><small>私用PCでの学習は「個人の学習」として行い、業務には使わない</small></span></label></li>
+  </ul>
+  <h3>💰 料金</h3>
+  <ul class="check" data-group="pre">
+    <li><label><input type="checkbox" data-k="pre-4"><span><b>料金とプランを確認した</b><small>A コースの Claude Code は Pro 以上の有料プランが必要（無料プランでは使えない）。最新の料金は <a href="https://claude.com/pricing" target="_blank" rel="noopener">公式の料金ページ</a> で確認する。B コースは無料プランで試せる</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-5"><span><b>解約の方法も確認した</b><small>お試しで1か月だけ契約する場合は、更新日を控えておく</small></span></label></li>
+  </ul>
+  <h3>🛡 安全に試す</h3>
+  <ul class="check" data-group="pre">
+    <li><label><input type="checkbox" data-k="pre-6"><span><b>練習用の空フォルダで作業する</b><small>ホームフォルダやデスクトップなど、大事なファイルがある場所では起動しない</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-7"><span><b>AIが許可を求めてきたら、内容を読んでから許可する</b><small>ファイルの変更やコマンドの実行の前に確認が出る。分からないものは「いいえ」で止めて、AIに意味を質問する</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-8"><span><b>確認を省略する設定は使わない</b><small>慣れるまでは、すべてを自動で許可する設定やオプションは使わない</small></span></label></li>
+  </ul>
+  <h3>💻 環境（A コースのみ）</h3>
+  <ul class="check" data-group="pre">
+    <li><label><input type="checkbox" data-k="pre-9"><span><b>OS が対応している</b><small>macOS 13 以降 ／ Windows 10（1809 以降）・11 ／ Ubuntu 20.04 以降など。メモリ 4GB 以上、インターネット接続が必要</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-10"><span><b>（Windows の場合）Git for Windows を入れた</b><small>なくても動くが、入れておくと手順どおりに進めやすい。<a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">ダウンロードページ</a></small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-11"><span><b>ブラウザ（Chrome / Edge / Safari など）がある</b><small>作ったアプリを開いて打鍵テストするのに使う</small></span></label></li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section class="card" id="s3">
+  <h2><span class="no">3</span>準備：Claude Code を入れる <span class="tag paid">A コース</span><span class="prog" data-prog="setup"></span></h2>
+  <p class="lead">ターミナル（黒い画面）に、コマンドを貼り付けて実行します。手順は 2026年11月時点の<a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">公式ドキュメント</a>に基づいています。</p>
+  <div class="tipbox"><p>ターミナルが苦手な人は、画面で操作できる <a href="https://code.claude.com/docs/en/desktop-quickstart" target="_blank" rel="noopener">デスクトップアプリ</a> 版でも同じことができます。その場合は ①② を飛ばし、アプリでログインしてから ③ のフォルダを開いてください。</p></div>
+
+  <div class="os" data-os>
+    <button data-os-k="mac" class="on">Mac</button>
+    <button data-os-k="win">Windows</button>
+  </div>
+
+  <div class="step">
+    <h3>① ターミナルを開く</h3>
+    <div class="ospane on" data-os-p="mac"><p>Spotlight（<kbd>⌘</kbd>+<kbd>Space</kbd>）で「ターミナル」と入力して開きます。</p></div>
+    <div class="ospane" data-os-p="win"><p>スタートメニューで「PowerShell」と入力して開きます（管理者として実行する必要はありません）。画面に <code class="i">PS C:\</code> と表示されていれば PowerShell です。</p></div>
+  </div>
+
+  <div class="step">
+    <h3>② インストールして確認する</h3>
+    <div class="ospane on" data-os-p="mac">
+      <div class="code"><div class="lb">ターミナルに貼り付けて Enter<button class="copy">コピー</button></div><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
+    </div>
+    <div class="ospane" data-os-p="win">
+      <div class="code"><div class="lb">PowerShell に貼り付けて Enter<button class="copy">コピー</button></div><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
+    </div>
+    <p>途中経過は表示されません。終わったら<b>ターミナルを一度閉じて開き直し</b>、次のコマンドでバージョン番号が出れば成功です。</p>
+    <div class="code"><div class="lb">確認<button class="copy">コピー</button></div><pre>claude --version</pre></div>
+    <ul class="check" data-group="setup"><li><label><input type="checkbox" data-k="setup-1"><span><b>バージョン番号が表示された</b><small>「見つからない」と出たら <a href="#s7">7. 困ったときは</a> へ</small></span></label></li></ul>
+  </div>
+
+  <div class="step">
+    <h3>③ 練習用フォルダを作って起動する</h3>
+    <div class="ospane on" data-os-p="mac">
+      <div class="code"><div class="lb">ターミナル<button class="copy">コピー</button></div><pre>mkdir -p ~/ai-practice/team-todo
+cd ~/ai-practice/team-todo
+git init
+claude</pre></div>
+      <p class="small"><code class="i">git</code> が無いと表示されたら、画面の案内に従って開発者ツールをインストールしてから、もう一度実行します。</p>
+    </div>
+    <div class="ospane" data-os-p="win">
+      <div class="code"><div class="lb">PowerShell<button class="copy">コピー</button></div><pre>mkdir $HOME\ai-practice\team-todo
+cd $HOME\ai-practice\team-todo
+git init
+claude</pre></div>
+      <p class="small"><code class="i">git</code> が見つからないと表示されたら、Git for Windows を入れてからターミナルを開き直します。</p>
+    </div>
+    <p>初回はブラウザが開くので、<b>個人のアカウント</b>でログインします。「このフォルダを信頼しますか」と聞かれたら、練習用フォルダであることを確かめてから許可します。</p>
+    <ul class="check" data-group="setup"><li><label><input type="checkbox" data-k="setup-2"><span><b>ログインでき、入力欄が表示された</b></span></label></li></ul>
+  </div>
+
+  <div class="step">
+    <h3>④ 最初の一言を送る</h3>
+    <div class="code prompt"><div class="lb">Claude Code に送る<button class="copy">コピー</button></div><pre>こんにちは。このフォルダは練習用の空のプロジェクトです。これから一緒にTODOアプリを作ります。返答と作る文書は日本語でお願いします。</pre></div>
+    <ul class="check" data-group="setup"><li><label><input type="checkbox" data-k="setup-3"><span><b>日本語で返事が来た</b></span></label></li></ul>
+  </div>
+
+  <h3>覚えておく操作</h3>
+  <table class="t">
+    <tr><th style="width:34%">操作</th><th>内容</th></tr>
+    <tr><td><kbd>Esc</kbd></td><td>AIの作業をその場で止める</td></tr>
+    <tr><td><kbd>Shift</kbd>+<kbd>Tab</kbd>（数回）</td><td>モードの切り替え。画面下に <code class="i">⏸ plan mode on</code> と出れば Plan mode</td></tr>
+    <tr><td><code class="i">/rewind</code> または <kbd>Esc</kbd> 2回（入力欄が空のとき）</td><td>前の状態に巻き戻す（AIが編集したファイルと会話）</td></tr>
+    <tr><td><code class="i">/exit</code></td><td>終了。<code class="i">claude --continue</code> で続きから再開できる</td></tr>
+  </table>
+</section>
+
+<!-- 4 -->
+<section class="card" id="s4">
+  <h2><span class="no">4</span>ハンズオン：TODOアプリを作る <span class="tag paid">A コース</span><span class="prog" data-prog="hands"></span></h2>
+  <p class="lead">デモと同じ流れです。各ステップで<b>指示文をコピーして送り</b>、<b>レビューのチェック</b>を付けてから次へ進みます。デモと違い、AIの返事は毎回変わります。</p>
+  <div class="tipbox"><p>💡 各ステップの終わりに「<b>ここまでの変更をコミットして</b>」と頼んでおくと、失敗しても戻せます。</p></div>
+
+  <div class="step">
+    <h3><span class="ph">STEP 1</span>要件定義 <span class="demo">（デモのフェーズ1）</span></h3>
+    <div class="code prompt"><div class="lb">指示文<button class="copy">コピー</button></div><pre>チームで使えるシンプルなTODO管理アプリを作りたいです。
+【目的】チーム内のタスクの抜け漏れを防ぎたい
+【前提・制約】ブラウザだけで動く（サーバーなし）／データは各自のブラウザに保存／タスクに期限を設定したい
+【出力】docs/requirements.md に要件定義書を作成。機能要件はID（FR-01〜）付きの表で
+不明点があれば、作成する前に質問してください。推測で決めた点は「仮定」と明記してください。</pre></div>
+    <p class="small">AIから質問が来たら、自分の考えで答えてください。答えに正解はありません。</p>
+    <ul class="check" data-group="hands">
+      <li><label><input type="checkbox" data-k="h1-1"><span><b>AIが「仮定」で決めた点を見つけて、すべて判断した</b><small>文字数の上限、並び順など。違うと思ったら直してもらう</small></span></label></li>
+      <li><label><input type="checkbox" data-k="h1-2"><span><b>「対象外」の機能が本当に不要か確認した</b></span></label></li>
+      <li><label><input type="checkbox" data-k="h1-3"><span><b>機能要件にIDが付いている</b><small>後のテスト仕様書と対応を取るために使う</small></span></label></li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="ph">STEP 2</span>実装計画 <span class="tag">Plan mode</span> <span class="demo">（デモのフェーズ1の最後）</span></h3>
+    <p><kbd>Shift</kbd>+<kbd>Tab</kbd> を何回か押し、画面下に <code class="i">⏸ plan mode on</code> と出たら、次の指示を送ります。この間、AIはファイルを変更しません。</p>
+    <div class="code prompt"><div class="lb">指示文（Plan mode で送る）<button class="copy">コピー</button></div><pre>docs/requirements.md をもとに実装計画を立ててください。
+・HTML / CSS / JavaScript だけで作る（ライブラリ不要、index.html をダブルクリックで開ける形）
+・作業を2つに分け、サブエージェント2体で並列に実装する前提にする
+・並列化の前に決める共通ルール（データの形・一覧の並び順・どのファイルを誰が担当するか）も計画に含める</pre></div>
+    <ul class="check" data-group="hands">
+      <li><label><input type="checkbox" data-k="h2-1"><span><b>2体の担当範囲が重なっていない</b><small>同じファイルの同じ処理を2体が触る計画なら、分け方を直してもらう</small></span></label></li>
+      <li><label><input type="checkbox" data-k="h2-2"><span><b>共通ルール（データの形・並び順）が決まっている</b><small>デモで競合が起きた原因。ここで決めておけば衝突しない</small></span></label></li>
+      <li><label><input type="checkbox" data-k="h2-3"><span><b>計画に納得してから承認した</b><small>直したい点があれば、承認せずに伝える</small></span></label></li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="ph">STEP 3</span>並列実装 <span class="tag">SubAgent</span> <span class="demo">（デモのフェーズ2・3）</span></h3>
+    <p>計画を承認したら、次の指示を送ります（Plan mode が解除されていなければ <kbd>Shift</kbd>+<kbd>Tab</kbd> で戻します）。</p>
+    <div class="code prompt"><div class="lb">指示文<button class="copy">コピー</button></div><pre>計画どおり実装してください。
+最初に共通ルールを docs/conventions.md に書き、それを渡したうえで、サブエージェント2体で並列に作業してください。
+終わったら、レビューしてほしい観点（AIが仮定した点・確認してほしい点）を一覧で示してください。</pre></div>
+    <p>できあがった <code class="i">index.html</code> をブラウザで開いて、実際に触ってみましょう（フォルダを開いてダブルクリック）。</p>
+    <ul class="check" data-group="hands">
+      <li><label><input type="checkbox" data-k="h3-1"><span><b>アプリを開いて、追加・完了・削除を試した</b></span></label></li>
+      <li><label><input type="checkbox" data-k="h3-2"><span><b>AIが出したレビュー観点を、1つずつ確認した</b></span></label></li>
+      <li><label><input type="checkbox" data-k="h3-3"><span><b>要件にない「良かれと思った改善」が入っていないか見た</b><small>デモのエージェントBのように、頼んでいない変更がないか</small></span></label></li>
+      <li><label><input type="checkbox" data-k="h3-4"><span><b>2体分のレビューを自分1人で受けて、量を体感した</b><small>これが「人間の判断がボトルネックになる」ということ</small></span></label></li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="ph">STEP 4</span>テスト仕様書 <span class="demo">（デモのフェーズ4）</span></h3>
+    <div class="code prompt"><div class="lb">指示文<button class="copy">コピー</button></div><pre>docs/requirements.md をもとに、docs/test-spec.md にテスト仕様書を作成してください。
+・正常系と異常系（未入力・空白だけの入力など）を含める
+・各ケースに、対応する要件ID・手順・期待結果・「1回目」「2回目」の結果欄を付ける
+・対象外にした観点があれば、理由とともに書く</pre></div>
+    <ul class="check" data-group="hands">
+      <li><label><input type="checkbox" data-k="h4-1"><span><b>すべての要件IDに、テストケースがある</b></span></label></li>
+      <li><label><input type="checkbox" data-k="h4-2"><span><b>「対象外にした観点」を読んで、本当に不要か判断した</b></span></label></li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="ph">STEP 5</span>打鍵テスト（ここは自分の手で） <span class="demo">（デモのフェーズ5）</span></h3>
+    <p>デモではAIが操作しましたが、ここでは<b>自分でテスト仕様書の手順どおりにブラウザを操作</b>し、結果欄に OK / NG を記入します（記入をAIに頼んでも構いません）。</p>
+    <ul class="check" data-group="hands">
+      <li><label><input type="checkbox" data-k="h5-1"><span><b>全ケースを実施して、1回目の結果を記入した</b></span></label></li>
+    </ul>
+    <div class="tipbox"><p><b>NGが1件も出なかったら</b>：要件を1つ追加して、STEP 1〜5 をもう一周してみましょう。おすすめは「一覧を期限が近い順に並べ替える」機能です。デモでエージェントBが勝手に入れた改善を、今度は<b>人間が決めた要件として</b>正式に追加します。</p></div>
+  </div>
+
+  <div class="step">
+    <h3><span class="ph">STEP 6</span>修正・回帰テスト <span class="demo">（デモのフェーズ6）</span></h3>
+    <div class="code prompt"><div class="lb">指示文（○○ の部分を書き換える）<button class="copy">コピー</button></div><pre>テスト仕様書の TC-○○ がNGでした。
+手順：（実際にやった操作）
+期待結果：（仕様書の期待結果）
+実際の結果：（起きたこと）
+原因を調べて修正し、変更差分を見せてください。修正後に再テストすべきケースも教えてください。</pre></div>
+    <ul class="check" data-group="hands">
+      <li><label><input type="checkbox" data-k="h6-1"><span><b>変更差分を読み、修正範囲が広がりすぎていないか確認した</b></span></label></li>
+      <li><label><input type="checkbox" data-k="h6-2"><span><b>全ケースで再テストし、2回目の結果を記入した</b><small>1回目のNGは消さずに残す</small></span></label></li>
+      <li><label><input type="checkbox" data-k="h6-3"><span><b>最後に「ここまでの変更をコミットして」と頼んだ</b></span></label></li>
+    </ul>
+  </div>
+  <div class="okbox"><p>🎉 お疲れさまでした！ ここまでで、デモと同じ流れを<b>本物のAI</b>で一通り回せました。</p></div>
+</section>
+
+<!-- 5 -->
+<section class="card" id="s5">
+  <h2><span class="no">5</span>Skill を作って使い回す <span class="tag">Skill</span> <span class="tag paid">A コース</span><span class="prog" data-prog="skill"></span></h2>
+  <p class="lead">ハンズオン中に何度も出てきた「レビュー依頼」を、<b>Skill</b>（AIが必要なときに読み込む手順書）にして、毎回同じ型で出してもらえるようにします。</p>
+  <div class="step">
+    <h3>① Skill のファイルを置く</h3>
+    <p>下の <a href="#s8">スターターキット</a> から <code class="i">SKILL.md</code> をダウンロードし、練習用フォルダの中の次の場所に置きます（フォルダが無ければ作ります）。</p>
+    <div class="code"><div class="lb">置き場所</div><pre>team-todo/.claude/skills/review-request/SKILL.md</pre></div>
+    <p class="small">ファイルを置くのもAIに頼めます：「.claude/skills/review-request/SKILL.md を作って、次の内容を書いて」と頼み、内容を貼り付けます。</p>
+  </div>
+  <div class="step">
+    <h3>② 呼び出す</h3>
+    <p>Claude Code を一度終了（<code class="i">/exit</code>）して起動し直し、入力欄に次のように入力します。</p>
+    <div class="code prompt"><div class="lb">入力<button class="copy">コピー</button></div><pre>/review-request docs/test-spec.md</pre></div>
+    <ul class="check" data-group="skill">
+      <li><label><input type="checkbox" data-k="sk-1"><span><b>「仮定した点・抜け漏れ・判断できない点・確認方法」の型でレビュー依頼が出た</b></span></label></li>
+      <li><label><input type="checkbox" data-k="sk-2"><span><b>自分が普段確認したい観点を SKILL.md に書き足してみた</b><small>チームで共有すれば、誰がレビューしても同じ観点で見られる</small></span></label></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="card" id="s6">
+  <h2><span class="no">6</span>無料で試すコース <span class="tag free">B コース</span><span class="prog" data-prog="free"></span></h2>
+  <p class="lead">インストールせず、ブラウザで <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> に個人のアカウントでログインして試します。「書く作業をAIに任せて、人間がレビューする」部分を体験できます。</p>
+
+  <div class="step">
+    <h3><span class="ph">STEP 1</span>要件定義書を作ってもらう</h3>
+    <div class="code prompt"><div class="lb">チャットに送る<button class="copy">コピー</button></div><pre>チームで使えるシンプルなTODO管理アプリの要件定義書を作ってください。
+【目的】チーム内のタスクの抜け漏れを防ぎたい
+【前提・制約】ブラウザだけで動く（サーバーなし）／データは各自のブラウザに保存／タスクに期限を設定したい
+【出力形式】機能要件はID（FR-01〜）付きの表で
+不明点があれば、作成する前に質問してください。推測で決めた点は「仮定」と明記してください。</pre></div>
+    <ul class="check" data-group="free">
+      <li><label><input type="checkbox" data-k="f1"><span><b>AIの質問に答えた</b></span></label></li>
+      <li><label><input type="checkbox" data-k="f2"><span><b>「仮定」と書かれた点をすべて判断し、必要なら直してもらった</b></span></label></li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3><span class="ph">STEP 2</span>テスト仕様書を作ってもらう</h3>
+    <div class="code prompt"><div class="lb">チャットに送る<button class="copy">コピー</button></div><pre>この要件定義書をもとに、テスト仕様書を表で作成してください。
+正常系と異常系を含め、各ケースに対応する要件ID・手順・期待結果を付けてください。
+テストの対象外にした観点があれば、理由とともに書いてください。</pre></div>
+    <ul class="check" data-group="free">
+      <li><label><input type="checkbox" data-k="f3"><span><b>すべての要件IDにテストがあるか確認した</b></span></label></li>
+      <li><label><input type="checkbox" data-k="f4"><span><b>対象外にした観点が本当に不要か判断した</b></span></label></li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3><span class="ph">STEP 3</span>（できれば）アプリも作ってもらう</h3>
+    <div class="code prompt"><div class="lb">チャットに送る<button class="copy">コピー</button></div><pre>この要件定義書どおりのアプリを、HTML 1ファイル（CSS と JavaScript も中に含める）で作ってください。</pre></div>
+    <p>チャット画面にアプリが表示されたら、そのまま触ってテスト仕様書どおりに打鍵してみましょう。表示されない場合は、コードをコピーしてメモ帳などに貼り、<code class="i">index.html</code> という名前で保存してブラウザで開きます。</p>
+    <ul class="check" data-group="free">
+      <li><label><input type="checkbox" data-k="f5"><span><b>テスト仕様書どおりに打鍵して、NGがあればAIに伝えて直してもらった</b></span></label></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="card" id="s7">
+  <h2><span class="no">7</span>困ったときは</h2>
+  <details><summary>claude --version で「見つからない」「認識されません」と出る</summary>
+    <p>インストール直後は、<b>ターミナルを閉じて開き直す</b>と直ることがほとんどです。直らない場合は <a href="https://code.claude.com/docs/en/troubleshoot-install" target="_blank" rel="noopener">公式のトラブルシューティング</a> を確認してください。</p>
+    <p>Windows で <code class="i">'irm' is not recognized</code> と出たら CMD を開いています。PowerShell を開き直してください。</p></details>
+  <details><summary>ログインで「このプランでは使えない」と言われる</summary>
+    <p>Claude Code は無料プランでは使えません。B コース（<a href="#s6">6</a>）で試すか、プランを確認してください。</p></details>
+  <details><summary>AIが質問せずに作り始めた／思っていたのと違う方向に進んでいる</summary>
+    <p><kbd>Esc</kbd> で止めて、「いったん止めて。作る前に、不明点を質問してください」と伝えます。大きな作業は Plan mode で計画から始めると防げます。</p></details>
+  <details><summary>やり直したい・元に戻したい</summary>
+    <p><code class="i">/rewind</code>（または入力欄が空のときに <kbd>Esc</kbd> 2回）で、指示を送る前の状態に戻せます。ただし、コマンドで変更されたファイルや SubAgent の変更は戻せないことがあるので、区切りごとに「コミットして」と頼んでおくのが安全です。</p></details>
+  <details><summary>英語で返事が来る</summary>
+    <p>「日本語で答えてください」と伝えます。毎回伝えるのが面倒なら、スターターキットの <code class="i">CLAUDE.md</code> をフォルダに置くと、プロジェクトのルールとして読み込まれます。</p></details>
+  <details><summary>「利用上限に達しました」と出た</summary>
+    <p>プランごとに一定時間あたりの利用量に上限があります。表示された時間まで待つと再開できます。</p></details>
+  <details><summary>許可を求められたけど、何をするのか分からない</summary>
+    <p>許可せずに「このコマンドは何をするものですか？」と質問してください。分からないまま許可しないことが、いちばんの安全策です。</p></details>
+  <details><summary>練習が終わったら？</summary>
+    <p>練習用フォルダは消して構いません。続けない場合は、プランの更新日までに解約を忘れずに。アンインストール方法は <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">公式ドキュメント</a> の「Uninstall」にあります。</p></details>
+</section>
+
+<!-- 8 -->
+<section class="card" id="s8">
+  <h2><span class="no">8</span>スターターキット（ダウンロード）</h2>
+  <p class="lead">練習用フォルダに置くと、デモで学んだ「型」をすぐ使えます。中身はダウンロード前に「中身を見る」で確認できます。</p>
+  <div class="dl">
+    <div class="f"><b>CLAUDE.md</b><span>プロジェクトのルール。フォルダの一番上に置くと、AIが毎回読み込む</span><button class="btn" data-dl="claude">ダウンロード</button></div>
+    <div class="f"><b>docs/conventions.md</b><span>並列化の前に決める共通ルールのひな形</span><button class="btn" data-dl="conv">ダウンロード</button></div>
+    <div class="f"><b>SKILL.md</b><span>レビュー依頼の Skill。<code class="i">.claude/skills/review-request/</code> に置く</span><button class="btn" data-dl="skill">ダウンロード</button></div>
+  </div>
+  <details><summary>中身を見る：CLAUDE.md</summary><div class="code"><pre data-src="claude"></pre></div></details>
+  <details><summary>中身を見る：docs/conventions.md</summary><div class="code"><pre data-src="conv"></pre></div></details>
+  <details><summary>中身を見る：SKILL.md</summary><div class="code"><pre data-src="skill"></pre></div></details>
+</section>
+
+<div class="foot">
+  <a class="btn" href="index.html">▶ 体験デモをもう一度</a>
+  <button class="btn sub" id="printBottom">🖨 印刷・PDF保存</button>
+  <button class="btn sub" id="resetChecks">チェックをすべて外す</button>
+</div>
+<p class="small" style="text-align:center;margin-top:14px">操作方法・料金・対応環境は変わることがあります。最新の情報は公式ドキュメントで確認してください。</p>
+
+</div>
+
+<script>
+'use strict';
+const FILES = {
+  claude: { name: 'CLAUDE.md', text: `# プロジェクトのルール
+
+このフォルダは AI駆動開発の練習用プロジェクト（チームTODOアプリ）です。
+
+## 進め方
+- 返答と作成する文書は日本語で書く
+- 作業を始める前に、不明点があれば質問する
+- 指示になかったことを自分で決めた場合は、必ず「仮定」として明示する
+- 要件定義書（docs/requirements.md）を正とする。要件にない改善は実装せず、提案として報告する
+- 並列で作業するときは、docs/conventions.md の共通ルールに従う
+
+## 成果物を出したとき
+- レビューしてほしい観点（仮定した点・抜け漏れ・人間が判断すべき点）を一覧で示す
+- コードを変更したときは、変更差分と再テストすべき範囲を示す
+` },
+  conv: { name: 'conventions.md', text: `# エージェント共通ルール
+
+並列で実装する前に、このルールを全エージェントに渡す。
+迷ったときは要件定義書（docs/requirements.md）を優先する。
+
+## 1. データの形
+
+| 項目 | 型 | 内容 |
+|---|---|---|
+| id | 文字列 | 一意のID |
+| title | 文字列 | タスク名 |
+| due | 文字列 | 期限（YYYY-MM-DD）。未設定は空文字 |
+| done | 真偽値 | 完了したかどうか |
+
+## 2. 共通ルール
+
+- 一覧の並び順：（例：新しく登録した順）。変えるときは先に要件定義書を変更する
+- データの保存先：（例：ブラウザの localStorage、キー名は ○○）
+- 要件にない「改善」は実装せず、提案として報告する
+
+## 3. 担当範囲
+
+| ファイル・処理 | 担当 |
+|---|---|
+| （例）index.html・タスクの追加と一覧表示 | エージェントA |
+| （例）期限の判定と表示 | エージェントB |
+| 共通の処理（保存・読み込み） | どちらか一方だけが担当する |
+` },
+  skill: { name: 'SKILL.md', text: `---
+name: review-request
+description: 成果物（要件定義書・コード・テスト仕様書・修正差分）を作成・変更したあとに、人間向けのレビュー依頼を作る
+---
+
+$ARGUMENTS（指定がなければ、直前に作成・変更した成果物）について、次の型でレビュー依頼を書いてください。
+
+## ⚠️ AIが仮定で決めた点
+指示になかったのに自分で決めたことを、理由とともにすべて挙げる。
+
+## 🔍 抜け漏れ・対象外にした点
+やらなかったこと、テストしなかったことと、その理由。
+
+## 🙋 AIには判断できない点
+業務・運用・好みなど、人間が決めるべきこと。
+
+## ✅ 確認方法
+人間が実際に確かめる手順（開くファイル、操作、見るべき箇所）。
+
+各項目は「何を」「なぜ確認が必要か」を1行ずつで書く。最後に、確認項目の数を書く。
+` },
+};
+
+/* ファイルの中身表示・ダウンロード */
+document.querySelectorAll('pre[data-src]').forEach((p) => { p.textContent = FILES[p.dataset.src].text; });
+document.querySelectorAll('[data-dl]').forEach((b) => b.addEventListener('click', () => {
+  const f = FILES[b.dataset.dl];
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([f.text], { type: 'text/markdown;charset=utf-8' }));
+  a.download = f.name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}));
+
+/* コピー */
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  return new Promise((res, rej) => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy') ? res() : rej(); } catch (e) { rej(e); }
+    ta.remove();
+  });
+}
+document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', () => {
+  const pre = b.closest('.code').querySelector('pre');
+  copyText(pre.textContent).then(() => {
+    b.textContent = '✓ コピーしました'; b.classList.add('done');
+    setTimeout(() => { b.textContent = 'コピー'; b.classList.remove('done'); }, 1600);
+  }).catch(() => { b.textContent = '選択してコピーしてください'; });
+}));
+
+/* OS切り替え */
+function setOs(k) {
+  document.querySelectorAll('[data-os-k]').forEach((b) => b.classList.toggle('on', b.dataset.osK === k));
+  document.querySelectorAll('[data-os-p]').forEach((p) => p.classList.toggle('on', p.dataset.osP === k));
+  try { localStorage.setItem('add-start.os', k); } catch (e) { /* noop */ }
+}
+document.querySelectorAll('[data-os-k]').forEach((b) => b.addEventListener('click', () => setOs(b.dataset.osK)));
+let os = null;
+try { os = localStorage.getItem('add-start.os'); } catch (e) { /* noop */ }
+if (!os) os = /Win/i.test(navigator.platform || navigator.userAgent) ? 'win' : 'mac';
+setOs(os);
+
+/* チェックリストの保存・進捗 */
+const KEY = 'add-start.checks';
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+const boxes = [...document.querySelectorAll('ul.check input[data-k]')];
+function updateProg() {
+  document.querySelectorAll('[data-prog]').forEach((el) => {
+    const g = el.dataset.prog;
+    const bs = boxes.filter((b) => b.closest('ul.check').dataset.group === g);
+    const n = bs.filter((b) => b.checked).length;
+    el.textContent = n === bs.length ? '✓ 完了' : n + ' / ' + bs.length;
+    el.classList.toggle('full', n === bs.length);
+  });
+}
+boxes.forEach((b) => {
+  b.checked = !!saved[b.dataset.k];
+  b.addEventListener('change', () => {
+    saved[b.dataset.k] = b.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* noop */ }
+    updateProg();
+  });
+});
+updateProg();
+document.getElementById('resetChecks').addEventListener('click', () => {
+  boxes.forEach((b) => { b.checked = false; });
+  saved = {};
+  try { localStorage.removeItem(KEY); } catch (e) { /* noop */ }
+  updateProg();
+});
+['printTop', 'printBottom'].forEach((id) => document.getElementById(id).addEventListener('click', (e) => { e.preventDefault(); window.print(); }));
+</script>
+</body>
+</html>
