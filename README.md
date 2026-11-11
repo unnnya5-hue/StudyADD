@@ -17,7 +17,7 @@
 デモを体験して「自分でも触ってみたい」人向けに、私用PCで試す手順をまとめたページです（公開URL：https://unnnya5-hue.github.io/StudyADD/start.html ）。
 
 - 始める前のチェックリスト（情報の扱い・料金・安全に試すための注意）。チェックはブラウザに保存されます
-- ページ上部でツールを切り替えると、手順がそのツール用に変わります（`start.html?tool=ag` のようにURLで指定も可）
+- ページ上部でツールと PC（Windows / Mac）を切り替えると、手順がその組み合わせ用に変わります（`start.html?tool=ag&os=win` のようにURLで指定も可。指定がなければ端末から自動判定し、判定できないときは Windows）
   - A. Claude Code（有料）：インストールから、デモと同じ6工程のハンズオン、Skill の作成まで
   - B. Antigravity CLI（Google・Gemini・無料）：A と同じ手順を無料で。Gemini CLI は 2026年6月18日に個人の無料利用が終了し、後継の Antigravity CLI に移行しています
   - C. チャットだけ（claude.ai / Gemini・無料）：要件定義書とテスト仕様書の作成・レビューを体験

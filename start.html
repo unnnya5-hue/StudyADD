@@ -73,11 +73,12 @@ ul.check small{display:block;color:var(--sub);font-size:14px;line-height:1.6}
 .code.prompt pre{background:#1f2540;border:1px solid #3b4470;font-family:var(--sans);font-size:15px}
 .copy{margin-left:auto;font:12px var(--sans);font-weight:700;color:var(--accent);background:#fff;border:1px solid #c7d4f7;border-radius:7px;padding:3px 10px;cursor:pointer}
 .copy.done{color:var(--ok);border-color:#bbf7d0}
-.os{display:flex;gap:6px;margin:6px 0 2px;flex-wrap:wrap}
-.os button{font:13px var(--sans);font-weight:700;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 12px;cursor:pointer}
-.os button.on{color:#fff;background:var(--accent);border-color:var(--accent)}
 /* 切り替え表示 */
-.ospane{display:none}.ospane.on{display:block}
+[data-os]{display:none}
+body[data-os-cur="win"] [data-os="win"],body[data-os-cur="mac"] [data-os="mac"]{display:block}
+body[data-os-cur="win"] span[data-os="win"],body[data-os-cur="mac"] span[data-os="mac"],
+body[data-os-cur="win"] code[data-os="win"],body[data-os-cur="mac"] code[data-os="mac"]{display:inline}
+.oshint{font-size:13px;color:var(--sub);margin:0 0 8px}
 [data-tool]{display:none}
 body[data-cur="cc"] [data-tool~="cc"],body[data-cur="ag"] [data-tool~="ag"],body[data-cur="chat"] [data-tool~="chat"]{display:block}
 body[data-cur="cc"] span[data-tool~="cc"],body[data-cur="ag"] span[data-tool~="ag"],body[data-cur="chat"] span[data-tool~="chat"],
@@ -114,19 +115,19 @@ details[open] summary{margin-bottom:6px}
   section.card{padding:18px 16px}
   .seg button{padding:5px 9px;font-size:13px}
   .seg button small,.seg .long,.toolbar .lb{display:none}
+  .toolbar .in{gap:6px}
 }
 @media print{
   body{background:#fff;font-size:12.5px}
   header.hero{padding:20px 16px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .toolbar,nav.toc,.copy,.os,.foot,.toplinks,.dl .btn{display:none!important}
-  .ospane{display:block!important}
   section.card{break-inside:auto;border:1px solid #ccc}
   .step,.code{break-inside:avoid}
   .code pre{background:#f4f6fa!important;color:#111!important;border:1px solid #ccc}
 }
 </style>
 </head>
-<body data-cur="cc">
+<body data-cur="cc" data-os-cur="win">
 
 <header class="hero"><div class="in">
   <span class="badge">AI駆動開発 体験デモの続き</span>
@@ -141,6 +142,11 @@ details[open] summary{margin-bottom:6px}
     <button data-t="cc">Claude Code<small>有料</small></button>
     <button data-t="ag">Antigravity<span class="long"> CLI（Gemini）</span><small>無料</small></button>
     <button data-t="chat">チャット<span class="long">だけ</span><small>無料</small></button>
+  </div>
+  <span class="lb" style="margin-left:6px">PC：</span>
+  <div class="seg" id="osSeg">
+    <button data-os-k="win">Win<span class="long">dows</span></button>
+    <button data-os-k="mac">Mac</button>
   </div>
 </div></div>
 
@@ -247,27 +253,26 @@ details[open] summary{margin-bottom:6px}
   <div class="tipbox" data-tool="cc"><p>ターミナルが苦手な人は、画面で操作できる <a href="https://code.claude.com/docs/en/desktop-quickstart" target="_blank" rel="noopener">デスクトップアプリ</a> 版でも同じことができます。</p></div>
   <div class="tipbox" data-tool="ag"><p>ターミナルが苦手な人は、画面で操作できる <a href="https://antigravity.google/download" target="_blank" rel="noopener">Antigravity のアプリ</a> 版もあります。このガイドは CLI（ターミナル版）の手順で説明します。</p></div>
 
-  <div class="os">
-    <button data-os-k="mac" class="on">Mac</button>
-    <button data-os-k="win">Windows</button>
-  </div>
+  <p class="oshint">いま <b><span data-os="win">Windows</span><span data-os="mac">Mac</span></b> 用の手順を表示しています（ページ上部の「PC」で切り替えられます）。</p>
 
   <div class="step">
     <h3>① ターミナルを開く</h3>
-    <div class="ospane on" data-os-p="mac"><p>Spotlight（<kbd>⌘</kbd>+<kbd>Space</kbd>）で「ターミナル」と入力して開きます。</p></div>
-    <div class="ospane" data-os-p="win"><p>スタートメニューで「PowerShell」と入力して開きます（管理者として実行する必要はありません）。画面に <code class="i">PS C:\</code> と表示されていれば PowerShell です。</p></div>
+    <div data-os="mac"><p>Spotlight（<kbd>⌘</kbd>+<kbd>Space</kbd>）で「ターミナル」と入力して開きます。</p></div>
+    <div data-os="win"><p>スタートメニューで「PowerShell」と入力して開きます（管理者として実行する必要はありません）。画面に <code class="i">PS C:\</code> と表示されていれば PowerShell です。</p></div>
   </div>
 
   <div class="step">
     <h3>② インストールして確認する</h3>
-    <div class="ospane on" data-os-p="mac">
+    <div data-os="mac">
       <div class="code" data-tool="cc"><div class="lb">ターミナルに貼り付けて Enter<button class="copy">コピー</button></div><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
       <div class="code" data-tool="ag"><div class="lb">ターミナルに貼り付けて Enter<button class="copy">コピー</button></div><pre>curl -fsSL https://antigravity.google/cli/install.sh | bash</pre></div>
     </div>
-    <div class="ospane" data-os-p="win">
+    <div data-os="win">
       <div class="code" data-tool="cc"><div class="lb">PowerShell に貼り付けて Enter<button class="copy">コピー</button></div><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
       <div class="code" data-tool="ag"><div class="lb">PowerShell に貼り付けて Enter<button class="copy">コピー</button></div><pre>irm https://antigravity.google/cli/install.ps1 | iex</pre></div>
     </div>
+    <p class="small" data-os="win">PowerShell では <kbd>Ctrl</kbd>+<kbd>V</kbd>（または右クリック）で貼り付けられます。途中経過は表示されないので、次の入力ができるようになるまで待ちます。</p>
+    <p class="small" data-os="mac">ターミナルでは <kbd>⌘</kbd>+<kbd>V</kbd> で貼り付けられます。途中経過は表示されないので、次の入力ができるようになるまで待ちます。</p>
     <p>終わったら<b>ターミナルを一度閉じて開き直し</b>、次のコマンドでバージョン番号が出れば成功です。</p>
     <div class="code" data-tool="cc"><div class="lb">確認<button class="copy">コピー</button></div><pre>claude --version</pre></div>
     <div class="code" data-tool="ag"><div class="lb">確認<button class="copy">コピー</button></div><pre>agy --version</pre></div>
@@ -276,14 +281,14 @@ details[open] summary{margin-bottom:6px}
 
   <div class="step">
     <h3>③ 練習用フォルダを作って起動する</h3>
-    <div class="ospane on" data-os-p="mac">
+    <div data-os="mac">
       <div class="code"><div class="lb">ターミナル<button class="copy">コピー</button></div><pre>mkdir -p ~/ai-practice/team-todo
 cd ~/ai-practice/team-todo
 git init
 <span data-tool="cc">claude</span><span data-tool="ag">agy</span></pre></div>
       <p class="small"><code class="i">git</code> が無いと表示されたら、画面の案内に従って開発者ツールをインストールしてから、もう一度実行します。</p>
     </div>
-    <div class="ospane" data-os-p="win">
+    <div data-os="win">
       <div class="code"><div class="lb">PowerShell<button class="copy">コピー</button></div><pre>mkdir $HOME\ai-practice\team-todo
 cd $HOME\ai-practice\team-todo
 git init
@@ -366,7 +371,10 @@ git init
     <div class="code prompt"><div class="lb">指示文<button class="copy">コピー</button></div><pre>計画どおり実装してください。
 最初に共通ルールを docs/conventions.md に書き、それを渡したうえで、サブエージェント2体で並列に作業してください。
 終わったら、レビューしてほしい観点（AIが仮定した点・確認してほしい点）を一覧で示してください。</pre></div>
-    <p>できあがった <code class="i">index.html</code> をブラウザで開いて、実際に触ってみましょう（フォルダを開いてダブルクリック）。</p>
+    <p>できあがった <code class="i">index.html</code> をブラウザで開いて、実際に触ってみましょう。</p>
+    <p class="small" data-os="win">エクスプローラーのアドレス欄に <code class="i">%USERPROFILE%\ai-practice\team-todo</code> と入力して Enter → <code class="i">index.html</code> をダブルクリック。拡張子が表示されない設定では「index」と表示されます（種類が「〜 HTML Document」のもの）。</p>
+    <p class="small" data-os="mac">Finder で <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> を押し、<code class="i">~/ai-practice/team-todo</code> と入力して移動 → <code class="i">index.html</code> をダブルクリック。</p>
+    <p class="small">「index.html をブラウザで開いて」とAIに頼むこともできます。</p>
     <p class="small" data-tool="ag">サブエージェントを使うかどうかはAIが判断するため、1体で作業することもあります。その場合も、レビューの観点は同じです。</p>
     <ul class="check" data-group="hands">
       <li><label><input type="checkbox" data-k="h3-1"><span><b>アプリを開いて、追加・完了・削除を試した</b></span></label></li>
@@ -424,6 +432,15 @@ git init
     <h3>① Skill のファイルを置く</h3>
     <p>下の <a href="#s8">スターターキット</a> から <code class="i">SKILL.md</code> をダウンロードし、練習用フォルダの中の次の場所に置きます（フォルダが無ければ作ります）。</p>
     <div class="code"><div class="lb">置き場所</div><pre>team-todo/<span data-tool="cc">.claude/skills</span><span data-tool="ag">.agents/skills</span>/review-request/SKILL.md</pre></div>
+    <p>AIとの会話とは<b>別のターミナルのウィンドウ</b>を開いて、次のコマンドで置けます（ダウンロードフォルダに <code class="i">SKILL.md</code> がある前提です）。</p>
+    <div data-os="win"><div class="code"><div class="lb">PowerShell<button class="copy">コピー</button></div><pre>cd $HOME\ai-practice\team-todo
+mkdir <span data-tool="cc">.claude</span><span data-tool="ag">.agents</span>\skills\review-request
+move $HOME\Downloads\SKILL.md <span data-tool="cc">.claude</span><span data-tool="ag">.agents</span>\skills\review-request\</pre></div></div>
+    <div data-os="mac"><div class="code"><div class="lb">ターミナル<button class="copy">コピー</button></div><pre>cd ~/ai-practice/team-todo
+mkdir -p <span data-tool="cc">.claude</span><span data-tool="ag">.agents</span>/skills/review-request
+mv ~/Downloads/SKILL.md <span data-tool="cc">.claude</span><span data-tool="ag">.agents</span>/skills/review-request/</pre></div>
+    <p class="small">「.」で始まるフォルダは Finder では隠れています。表示するには Finder で <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>.</kbd> を押します。</p></div>
+    <p class="small">ダウンロードしたファイル名が「SKILL (1).md」などになっていたら、コマンドのファイル名をそれに合わせます。</p>
     <p class="small">ファイルを置くのもAIに頼めます：「<span data-tool="cc">.claude/skills</span><span data-tool="ag">.agents/skills</span>/review-request/SKILL.md を作って、次の内容を書いて」と頼み、内容を貼り付けます。</p>
   </div>
   <div class="step">
@@ -469,7 +486,9 @@ git init
   <div class="step">
     <h3><span class="ph">STEP 3</span>（できれば）アプリも作ってもらう</h3>
     <div class="code prompt"><div class="lb">チャットに送る<button class="copy">コピー</button></div><pre>この要件定義書どおりのアプリを、HTML 1ファイル（CSS と JavaScript も中に含める）で作ってください。</pre></div>
-    <p>チャット画面にアプリが表示されたら、そのまま触ってテスト仕様書どおりに打鍵してみましょう。表示されない場合は、コードをコピーしてメモ帳などに貼り、<code class="i">index.html</code> という名前で保存してブラウザで開きます。</p>
+    <p>チャット画面にアプリが表示されたら、そのまま触ってテスト仕様書どおりに打鍵してみましょう。表示されない場合は、コードをコピーして保存します。</p>
+    <p class="small" data-os="win"><b>Windows</b>：メモ帳に貼り付け →「ファイル」>「名前を付けて保存」→ ファイル名を <code class="i">index.html</code>、ファイルの種類を「すべてのファイル」、エンコードを「UTF-8」にして保存 → 保存したファイルをダブルクリック。</p>
+    <p class="small" data-os="mac"><b>Mac</b>：テキストエディットを開き、「フォーマット」>「標準テキストにする」を選んでから貼り付け → <code class="i">index.html</code> という名前で保存（拡張子を聞かれたら「.html を使用」）→ 保存したファイルをダブルクリック。</p>
     <ul class="check" data-group="free">
       <li><label><input type="checkbox" data-k="f5"><span><b>テスト仕様書どおりに打鍵して、NGがあればAIに伝えて直してもらった</b></span></label></li>
     </ul>
@@ -481,7 +500,11 @@ git init
   <h2><span class="no">7</span>困ったときは</h2>
   <details data-tool="cc ag"><summary><span data-tool="cc">claude</span><span data-tool="ag">agy</span> --version で「見つからない」「認識されません」と出る</summary>
     <p>インストール直後は、<b>ターミナルを閉じて開き直す</b>と直ることがほとんどです。直らない場合は公式のトラブルシューティング（<span data-tool="cc"><a href="https://code.claude.com/docs/en/troubleshoot-install" target="_blank" rel="noopener">Claude Code</a></span><span data-tool="ag"><a href="https://antigravity.google/docs/cli/troubleshooting" target="_blank" rel="noopener">Antigravity CLI</a></span>）を確認してください。</p>
-    <p>Windows で <code class="i">'irm' is not recognized</code> と出たら CMD を開いています。PowerShell を開き直してください。</p></details>
+    <p data-os="win"><code class="i">'irm' is not recognized</code>（'irm' は認識されていません）と出たら CMD を開いています。PowerShell を開き直してください。</p></details>
+  <div data-os="win"><details data-tool="cc"><summary>「Git Bash が見つからない」と言われる（Windows）</summary>
+    <p><a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">Git for Windows</a> をインストールしてから、ターミナルを開き直して <code class="i">claude</code> を起動し直します。</p></details></div>
+  <div data-os="win"><details><summary>ファイルの拡張子（.html や .md）が見えない（Windows）</summary>
+    <p>エクスプローラーで、Windows 11 は「表示」>「表示」>「ファイル名拡張子」、Windows 10 は「表示」タブの「ファイル名拡張子」にチェックを入れると表示されます。<code class="i">index.html.txt</code> のように余計な拡張子が付いていないか確認できます。</p></details></div>
   <details data-tool="cc"><summary>ログインで「このプランでは使えない」と言われる</summary>
     <p>Claude Code は無料プランでは使えません。B コース（Antigravity CLI）か C コース（チャットだけ）で試してください。</p></details>
   <details data-tool="ag"><summary>「Gemini CLI」の手順を見つけたけど、そちらではだめ？</summary>
@@ -512,6 +535,18 @@ git init
     <div class="f"><b><span data-tool="cc chat">CLAUDE.md</span><span data-tool="ag">AGENTS.md</span></b><span>プロジェクトのルール。フォルダの一番上に置くと、AIが毎回読み込む</span><button class="btn" data-dl="rules">ダウンロード</button></div>
     <div class="f"><b>docs/conventions.md</b><span>並列化の前に決める共通ルールのひな形</span><button class="btn" data-dl="conv">ダウンロード</button></div>
     <div class="f"><b>SKILL.md</b><span>レビュー依頼の Skill。<code class="i"><span data-tool="cc chat">.claude</span><span data-tool="ag">.agents</span>/skills/review-request/</code> に置く</span><button class="btn" data-dl="skill">ダウンロード</button></div>
+  </div>
+  <div data-tool="cc ag">
+    <h3>置き方</h3>
+    <p class="small">ダウンロードフォルダから練習用フォルダへ移します（AIとの会話とは別のターミナルで実行）。SKILL.md の置き方は <a href="#s5">5. Skill</a> を見てください。</p>
+    <div data-os="win"><div class="code"><div class="lb">PowerShell<button class="copy">コピー</button></div><pre>cd $HOME\ai-practice\team-todo
+move $HOME\Downloads\<span data-tool="cc">CLAUDE.md</span><span data-tool="ag">AGENTS.md</span> .
+mkdir docs -Force
+move $HOME\Downloads\conventions.md docs\</pre></div></div>
+    <div data-os="mac"><div class="code"><div class="lb">ターミナル<button class="copy">コピー</button></div><pre>cd ~/ai-practice/team-todo
+mv ~/Downloads/<span data-tool="cc">CLAUDE.md</span><span data-tool="ag">AGENTS.md</span> .
+mkdir -p docs
+mv ~/Downloads/conventions.md docs/</pre></div></div>
   </div>
   <details><summary>中身を見る：<span data-tool="cc chat">CLAUDE.md</span><span data-tool="ag">AGENTS.md</span></summary><div class="code"><pre data-src="rules"></pre></div></details>
   <details><summary>中身を見る：docs/conventions.md</summary><div class="code"><pre data-src="conv"></pre></div></details>
@@ -634,6 +669,7 @@ document.querySelectorAll('[data-dl]').forEach((b) => b.addEventListener('click'
 function visibleText(el) {
   const c = el.cloneNode(true);
   c.querySelectorAll('[data-tool]').forEach((n) => { if (!n.dataset.tool.split(' ').includes(cur)) n.remove(); });
+  c.querySelectorAll('[data-os]').forEach((n) => { if (n.dataset.os !== curOs) n.remove(); });
   return c.textContent;
 }
 function copyText(text) {
@@ -654,13 +690,16 @@ document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', ()
 }));
 
 /* OS切り替え */
+let curOs = 'win';
 function setOs(k) {
+  if (k !== 'win' && k !== 'mac') return;
+  curOs = k;
+  document.body.dataset.osCur = k;
   document.querySelectorAll('[data-os-k]').forEach((b) => b.classList.toggle('on', b.dataset.osK === k));
-  document.querySelectorAll('[data-os-p]').forEach((p) => p.classList.toggle('on', p.dataset.osP === k));
   store.set('add-start.os', k);
+  if (typeof updateProg === 'function') updateProg();
 }
 document.querySelectorAll('[data-os-k]').forEach((b) => b.addEventListener('click', () => setOs(b.dataset.osK)));
-setOs(store.get('add-start.os') || (/Win/i.test(navigator.platform || navigator.userAgent) ? 'win' : 'mac'));
 
 /* チェックリストの保存・進捗（表示中の項目だけを数える） */
 const KEY = 'add-start.checks';
@@ -670,6 +709,7 @@ const boxes = [...document.querySelectorAll('ul.check input[data-k]')];
 function shown(el) {
   for (let n = el; n && n !== document.body; n = n.parentElement) {
     if (n.dataset && n.dataset.tool && !n.dataset.tool.split(' ').includes(cur)) return false;
+    if (n.dataset && n.dataset.os && n.dataset.os !== curOs) return false;
   }
   return true;
 }
@@ -700,8 +740,9 @@ document.getElementById('resetChecks').addEventListener('click', () => {
 ['printTop', 'printBottom'].forEach((id) => document.getElementById(id).addEventListener('click', (e) => { e.preventDefault(); window.print(); }));
 
 /* 初期表示：URLの ?tool=ag などを優先 */
-let init = null;
-try { init = new URLSearchParams(location.search).get('tool'); } catch (e) { /* noop */ }
+let init = null, initOs = null;
+try { const q = new URLSearchParams(location.search); init = q.get('tool'); initOs = q.get('os'); } catch (e) { /* noop */ }
+setOs(['win', 'mac'].includes(initOs) ? initOs : (store.get('add-start.os') || (/Mac/i.test(navigator.platform || navigator.userAgent) && !/iPhone|iPad/i.test(navigator.userAgent) ? 'mac' : 'win')));
 setTool(TOOLS.includes(init) ? init : (store.get('add-start.tool') || 'cc'));
 </script>
 </body>
