@@ -12,7 +12,7 @@
   --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"BIZ UDGothic",monospace;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:16px}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8}
 a{color:var(--accent)}
 .wrap{max-width:960px;margin:0 auto;padding:0 16px 80px}
@@ -23,7 +23,15 @@ header.hero h1{font-size:34px;line-height:1.35;margin:0 0 10px}
 header.hero p{margin:0;color:#c9cff5;font-size:17px}
 .toplinks{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
 .toplinks a{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:6px 12px;font-size:14px;text-decoration:none}
-nav.toc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:-22px 0 28px;position:relative;box-shadow:0 6px 20px rgba(20,26,46,.06)}
+/* ツール切り替えバー */
+.toolbar{position:sticky;top:0;z-index:10;background:rgba(245,247,251,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.toolbar .in{max-width:960px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.toolbar .lb{font-size:13px;font-weight:700;color:var(--sub)}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{font:14px var(--sans);font-weight:700;color:var(--sub);background:transparent;border:0;border-radius:7px;padding:5px 12px;cursor:pointer}
+.seg button.on{color:#fff;background:var(--accent)}
+.seg button small{font-weight:600;opacity:.85;margin-left:4px}
+nav.toc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:22px 0 28px;box-shadow:0 6px 20px rgba(20,26,46,.06)}
 nav.toc b{font-size:13px;color:var(--sub);letter-spacing:.06em}
 nav.toc ol{margin:6px 0 0;padding-left:22px;columns:2;column-gap:28px}
 nav.toc li{break-inside:avoid}
@@ -35,11 +43,15 @@ section.card>h2{font-size:23px;margin:0 0 4px;display:flex;align-items:center;ga
 .lead{color:var(--sub);margin:0 0 14px}
 h3{font-size:18px;margin:22px 0 8px}
 p{margin:0 0 10px}
-.courses{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 4px}
-.course{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--soft)}
-.course.main{border:2px solid var(--accent);background:#eef2fd}
-.course h3{margin:0 0 6px}
-.course ul{margin:0;padding-left:20px;font-size:15px}
+.courses{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:8px 0 4px}
+.course{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--soft);cursor:pointer;transition:border-color .15s}
+.course:hover{border-color:#c7d4f7}
+.course.on{border:2px solid var(--accent);background:#eef2fd}
+.course h3{margin:0 0 4px;font-size:17px}
+.course .ai{font-size:13px;color:var(--sub);margin-bottom:6px}
+.course ul{margin:0;padding-left:18px;font-size:14.5px}
+.course .pick{display:inline-block;margin-top:8px;font-size:13px;font-weight:700;color:var(--accent)}
+.course.on .pick::before{content:"✓ "}
 .tag{display:inline-block;font:700 12px var(--mono);color:var(--accent);background:#eef2fd;border:1px solid #c7d4f7;border-radius:6px;padding:0 7px;vertical-align:2px}
 .tag.free{color:var(--ok);background:#ecfdf3;border-color:#bbf7d0}
 .tag.paid{color:var(--warn);background:#fff4ec;border-color:#fed7aa}
@@ -64,7 +76,16 @@ ul.check small{display:block;color:var(--sub);font-size:14px;line-height:1.6}
 .os{display:flex;gap:6px;margin:6px 0 2px;flex-wrap:wrap}
 .os button{font:13px var(--sans);font-weight:700;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 12px;cursor:pointer}
 .os button.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+/* 切り替え表示 */
 .ospane{display:none}.ospane.on{display:block}
+[data-tool]{display:none}
+body[data-cur="cc"] [data-tool~="cc"],body[data-cur="ag"] [data-tool~="ag"],body[data-cur="chat"] [data-tool~="chat"]{display:block}
+body[data-cur="cc"] span[data-tool~="cc"],body[data-cur="ag"] span[data-tool~="ag"],body[data-cur="chat"] span[data-tool~="chat"],
+body[data-cur="cc"] code[data-tool~="cc"],body[data-cur="ag"] code[data-tool~="ag"],body[data-cur="chat"] code[data-tool~="chat"]{display:inline}
+body[data-cur="cc"] li[data-tool~="cc"],body[data-cur="ag"] li[data-tool~="ag"],body[data-cur="chat"] li[data-tool~="chat"]{display:list-item}
+body[data-cur="cc"] tr[data-tool~="cc"],body[data-cur="ag"] tr[data-tool~="ag"],body[data-cur="chat"] tr[data-tool~="chat"]{display:table-row}
+ul.check li[data-tool]{list-style:none}
+body[data-cur="cc"] table[data-tool~="cc"],body[data-cur="ag"] table[data-tool~="ag"],body[data-cur="chat"] table[data-tool~="chat"]{display:table}
 kbd{font:13px var(--mono);background:#fff;border:1px solid #c9ced8;border-bottom-width:2px;border-radius:5px;padding:0 6px}
 code.i{font:14px var(--mono);background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:0 5px}
 .step{border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:14px 0;background:#fff}
@@ -77,7 +98,7 @@ table.t th{background:var(--soft);font-size:13px;color:var(--sub)}
 .dl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:10px 0}
 .dl .f{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--soft);display:flex;flex-direction:column;gap:6px}
 .dl .f b{font-family:var(--mono);font-size:14px}
-.dl .f span{font-size:14px;color:var(--sub);flex:1}
+.dl .f>span{font-size:14px;color:var(--sub);flex:1}
 .btn{font:14px var(--sans);font-weight:700;color:#fff;background:var(--accent);border:0;border-radius:9px;padding:8px 14px;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
 .btn.sub{color:var(--accent);background:#fff;border:1px solid #c7d4f7}
 details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;background:#fff}
@@ -85,16 +106,19 @@ details summary{cursor:pointer;font-weight:700}
 details[open] summary{margin-bottom:6px}
 .foot{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:28px}
 .small{font-size:14px;color:var(--sub)}
+.skipnote{background:var(--soft);border:1px dashed #c9ced8;border-radius:12px;padding:14px 18px;color:var(--sub)}
 @media (max-width:720px){
   header.hero h1{font-size:26px}
   nav.toc ol{columns:1}
   .courses,.dl{grid-template-columns:1fr}
   section.card{padding:18px 16px}
+  .seg button{padding:5px 9px;font-size:13px}
+  .seg button small,.seg .long,.toolbar .lb{display:none}
 }
 @media print{
   body{background:#fff;font-size:12.5px}
   header.hero{padding:20px 16px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  nav.toc,.copy,.os,.foot,.toplinks,.dl .btn{display:none!important}
+  .toolbar,nav.toc,.copy,.os,.foot,.toplinks,.dl .btn{display:none!important}
   .ospane{display:block!important}
   section.card{break-inside:auto;border:1px solid #ccc}
   .step,.code{break-inside:avoid}
@@ -102,7 +126,7 @@ details[open] summary{margin-bottom:6px}
 }
 </style>
 </head>
-<body>
+<body data-cur="cc">
 
 <header class="hero"><div class="in">
   <span class="badge">AI駆動開発 体験デモの続き</span>
@@ -111,16 +135,25 @@ details[open] summary{margin-bottom:6px}
   <div class="toplinks"><a href="index.html">▶ 体験デモ</a><a href="slides.html">📊 発表スライド</a><a href="#" id="printTop">🖨 印刷・PDF保存</a></div>
 </div></header>
 
+<div class="toolbar"><div class="in">
+  <span class="lb">使うツール：</span>
+  <div class="seg" id="toolSeg">
+    <button data-t="cc">Claude Code<small>有料</small></button>
+    <button data-t="ag">Antigravity<span class="long"> CLI（Gemini）</span><small>無料</small></button>
+    <button data-t="chat">チャット<span class="long">だけ</span><small>無料</small></button>
+  </div>
+</div></div>
+
 <div class="wrap">
 
 <nav class="toc"><b>もくじ</b>
   <ol>
-    <li><a href="#s1">はじめに：2つのコース</a></li>
+    <li><a href="#s1">はじめに：3つのコース</a></li>
     <li><a href="#s2">始める前のチェックリスト</a></li>
-    <li><a href="#s3">準備：Claude Code を入れる</a></li>
+    <li><a href="#s3">準備：ツールを入れる</a></li>
     <li><a href="#s4">ハンズオン：TODOアプリを作る</a></li>
     <li><a href="#s5">Skill を作って使い回す</a></li>
-    <li><a href="#s6">無料で試すコース</a></li>
+    <li><a href="#s6">チャットだけで試すコース</a></li>
     <li><a href="#s7">困ったときは</a></li>
     <li><a href="#s8">スターターキット（ダウンロード）</a></li>
   </ol>
@@ -128,29 +161,45 @@ details[open] summary{margin-bottom:6px}
 
 <!-- 1 -->
 <section class="card" id="s1">
-  <h2><span class="no">1</span>はじめに：2つのコース</h2>
-  <p class="lead">このガイドは<b>私用PC・個人のアカウント</b>で、<b>練習用の題材</b>を使って試すことを前提にしています。</p>
+  <h2><span class="no">1</span>はじめに：3つのコース</h2>
+  <p class="lead">このガイドは<b>私用PC・個人のアカウント</b>で、<b>練習用の題材</b>を使って試すことを前提にしています。コースを選ぶと、ページの内容がそのツール用に切り替わります（上部のバーでも切り替えられます）。</p>
   <div class="courses">
-    <div class="course main">
-      <h3>A. しっかりコース <span class="tag paid">有料プラン</span></h3>
+    <div class="course" data-pick="cc">
+      <h3>A. Claude Code <span class="tag paid">有料</span></h3>
+      <div class="ai">Anthropic の Claude を使う</div>
       <ul>
-        <li>Claude Code を使い、デモと同じTODOアプリを<b>実際に作る</b></li>
-        <li>Plan mode・SubAgent・Skill も体験できる</li>
-        <li>所要時間：<b>1.5〜2時間</b>（準備30分＋作業）</li>
-        <li>必要なもの：Claude の Pro 以上のプラン</li>
+        <li>デモと同じアプリを<b>実際に作る</b></li>
+        <li>Plan mode・SubAgent・Skill を体験</li>
+        <li>1.5〜2時間</li>
+        <li>Pro 以上の有料プランが必要</li>
       </ul>
+      <span class="pick">このコースで進める</span>
     </div>
-    <div class="course">
-      <h3>B. お試しコース <span class="tag free">無料</span></h3>
+    <div class="course" data-pick="ag">
+      <h3>B. Antigravity CLI <span class="tag free">無料</span></h3>
+      <div class="ai">Google の Gemini を使う</div>
       <ul>
-        <li>インストール不要。ブラウザのチャットで試す</li>
-        <li>要件定義書・テスト仕様書づくりとレビューを体験</li>
-        <li>所要時間：<b>30分</b></li>
-        <li>必要なもの：Claude の無料アカウント</li>
+        <li>A と同じ手順を<b>無料で</b>試せる</li>
+        <li>Plan mode・SubAgent・Skill を体験</li>
+        <li>1.5〜2時間</li>
+        <li>Googleアカウントがあれば無料（週ごとの利用上限あり）</li>
       </ul>
+      <span class="pick">このコースで進める</span>
+    </div>
+    <div class="course" data-pick="chat">
+      <h3>C. チャットだけ <span class="tag free">無料</span></h3>
+      <div class="ai">Claude または Gemini のWeb画面</div>
+      <ul>
+        <li>インストール不要</li>
+        <li>要件定義・テスト仕様書づくりとレビューを体験</li>
+        <li>30分</li>
+        <li>無料アカウントでOK</li>
+      </ul>
+      <span class="pick">このコースで進める</span>
     </div>
   </div>
-  <p class="small" style="margin-top:10px">どちらのコースも、まず <a href="#s2">2. チェックリスト</a> を確認してください。B コースの人は 3〜5 を飛ばして <a href="#s6">6</a> へ進めます。チェックした内容はこのブラウザに保存されます。</p>
+  <div class="tipbox" style="margin-top:14px"><p><b>Gemini CLI について</b>：以前は Gemini CLI を無料で使えましたが、個人の無料利用は <b>2026年6月18日に終了</b>し、後継の <b>Antigravity CLI</b> に移りました（<a href="https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli" target="_blank" rel="noopener">Google の発表</a>）。B コースはこの Antigravity CLI を使います。</p></div>
+  <p class="small">チェックした内容と選んだコースは、このブラウザに保存されます。</p>
 </section>
 
 <!-- 2 -->
@@ -162,33 +211,43 @@ details[open] summary{margin-bottom:6px}
     <li><label><input type="checkbox" data-k="pre-1"><span><b>会社の情報を私用PCやAIに入れない</b><small>ソースコード、資料、顧客・取引先の情報、社内システムの名前などは使わない。題材はこのガイドのTODOアプリにする</small></span></label></li>
     <li><label><input type="checkbox" data-k="pre-2"><span><b>個人のアカウント（私用のメールアドレス）で登録する</b><small>会社のメールアドレスやアカウントは使わない</small></span></label></li>
     <li><label><input type="checkbox" data-k="pre-3"><span><b>就業規則など、社内のルールに反しないことを確認した</b><small>私用PCでの学習は「個人の学習」として行い、業務には使わない</small></span></label></li>
+    <li data-tool="ag chat"><label><input type="checkbox" data-k="pre-free"><span><b>無料プランでは、入力した内容がサービスやAIの改善に使われる場合があることを理解した</b><small>だからこそ、練習用の題材以外は入れない。扱いは各サービスの利用規約・プライバシー設定で確認する<span data-tool="ag">（Antigravity CLI では <code class="i">/config</code> の「Enable Telemetry」で送信をオフにできる）</span></small></span></label></li>
   </ul>
   <h3>💰 料金</h3>
   <ul class="check" data-group="pre">
-    <li><label><input type="checkbox" data-k="pre-4"><span><b>料金とプランを確認した</b><small>A コースの Claude Code は Pro 以上の有料プランが必要（無料プランでは使えない）。最新の料金は <a href="https://claude.com/pricing" target="_blank" rel="noopener">公式の料金ページ</a> で確認する。B コースは無料プランで試せる</small></span></label></li>
-    <li><label><input type="checkbox" data-k="pre-5"><span><b>解約の方法も確認した</b><small>お試しで1か月だけ契約する場合は、更新日を控えておく</small></span></label></li>
+    <li data-tool="cc"><label><input type="checkbox" data-k="pre-4"><span><b>料金とプランを確認した</b><small>Claude Code は Pro 以上の有料プランが必要（無料プランでは使えない）。最新の料金は <a href="https://claude.com/pricing" target="_blank" rel="noopener">公式の料金ページ</a> で確認する</small></span></label></li>
+    <li data-tool="cc"><label><input type="checkbox" data-k="pre-5"><span><b>解約の方法も確認した</b><small>お試しで1か月だけ契約する場合は、更新日を控えておく</small></span></label></li>
+    <li data-tool="ag"><label><input type="checkbox" data-k="pre-ag1"><span><b>無料プランの上限を理解した</b><small>Antigravity の無料プランには<b>週ごとの利用上限</b>がある（具体的な回数は非公開）。上限に達したら翌週まで待つ。<a href="https://antigravity.google/docs/plans" target="_blank" rel="noopener">プランの説明</a></small></span></label></li>
+    <li data-tool="ag"><label><input type="checkbox" data-k="pre-ag2"><span><b>有料プランやクレジットの購入はしない</b><small>無料のまま試す。案内が出ても、内容を理解するまで申し込まない</small></span></label></li>
+    <li data-tool="chat"><label><input type="checkbox" data-k="pre-chat1"><span><b>無料プランのまま使う</b><small>回数の上限に達したら、時間をおいて再開する</small></span></label></li>
   </ul>
+  <div data-tool="cc ag">
   <h3>🛡 安全に試す</h3>
   <ul class="check" data-group="pre">
     <li><label><input type="checkbox" data-k="pre-6"><span><b>練習用の空フォルダで作業する</b><small>ホームフォルダやデスクトップなど、大事なファイルがある場所では起動しない</small></span></label></li>
-    <li><label><input type="checkbox" data-k="pre-7"><span><b>AIが許可を求めてきたら、内容を読んでから許可する</b><small>ファイルの変更やコマンドの実行の前に確認が出る。分からないものは「いいえ」で止めて、AIに意味を質問する</small></span></label></li>
-    <li><label><input type="checkbox" data-k="pre-8"><span><b>確認を省略する設定は使わない</b><small>慣れるまでは、すべてを自動で許可する設定やオプションは使わない</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-7"><span><b>AIが許可を求めてきたら、内容を読んでから許可する</b><small>ファイルの変更やコマンドの実行の前に確認が出る。分からないものは許可せず、AIに意味を質問する</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-8"><span><b>確認を省略する設定は使わない</b><small>慣れるまでは、すべてを自動で許可するモードやオプション<span data-tool="ag">（auto モードなど）</span>は使わない</small></span></label></li>
   </ul>
-  <h3>💻 環境（A コースのみ）</h3>
+  <h3>💻 環境</h3>
   <ul class="check" data-group="pre">
-    <li><label><input type="checkbox" data-k="pre-9"><span><b>OS が対応している</b><small>macOS 13 以降 ／ Windows 10（1809 以降）・11 ／ Ubuntu 20.04 以降など。メモリ 4GB 以上、インターネット接続が必要</small></span></label></li>
-    <li><label><input type="checkbox" data-k="pre-10"><span><b>（Windows の場合）Git for Windows を入れた</b><small>なくても動くが、入れておくと手順どおりに進めやすい。<a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">ダウンロードページ</a></small></span></label></li>
+    <li data-tool="cc"><label><input type="checkbox" data-k="pre-9"><span><b>OS が対応している</b><small>macOS 13 以降 ／ Windows 10（1809 以降）・11 ／ Ubuntu 20.04 以降など。メモリ 4GB 以上、インターネット接続が必要</small></span></label></li>
+    <li data-tool="ag"><label><input type="checkbox" data-k="pre-ag3"><span><b>OS が対応している</b><small>目安：macOS 12 以降 ／ Windows 10・11（64ビット）／ Ubuntu 20 以降など。インターネット接続が必要</small></span></label></li>
+    <li><label><input type="checkbox" data-k="pre-10"><span><b>Git が使える</b><small>途中の状態を保存して、失敗したら戻すために使う。Mac は初回に案内が出たらインストール、Windows は <a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">Git for Windows</a> を入れる</small></span></label></li>
     <li><label><input type="checkbox" data-k="pre-11"><span><b>ブラウザ（Chrome / Edge / Safari など）がある</b><small>作ったアプリを開いて打鍵テストするのに使う</small></span></label></li>
   </ul>
+  </div>
 </section>
 
 <!-- 3 -->
 <section class="card" id="s3">
-  <h2><span class="no">3</span>準備：Claude Code を入れる <span class="tag paid">A コース</span><span class="prog" data-prog="setup"></span></h2>
-  <p class="lead">ターミナル（黒い画面）に、コマンドを貼り付けて実行します。手順は 2026年11月時点の<a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">公式ドキュメント</a>に基づいています。</p>
-  <div class="tipbox"><p>ターミナルが苦手な人は、画面で操作できる <a href="https://code.claude.com/docs/en/desktop-quickstart" target="_blank" rel="noopener">デスクトップアプリ</a> 版でも同じことができます。その場合は ①② を飛ばし、アプリでログインしてから ③ のフォルダを開いてください。</p></div>
+  <h2><span class="no">3</span>準備：ツールを入れる<span class="prog" data-prog="setup"></span></h2>
+  <div data-tool="chat" class="skipnote">C コース（チャットだけ）はインストール不要です。<a href="#s6">6. チャットだけで試すコース</a> へ進んでください。</div>
+  <div data-tool="cc ag">
+  <p class="lead">ターミナル（黒い画面）に、コマンドを貼り付けて実行します。手順は 2026年11月時点の公式ドキュメント（<span data-tool="cc"><a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">Claude Code</a></span><span data-tool="ag"><a href="https://antigravity.google/docs/getting-started" target="_blank" rel="noopener">Antigravity</a></span>）に基づいています。</p>
+  <div class="tipbox" data-tool="cc"><p>ターミナルが苦手な人は、画面で操作できる <a href="https://code.claude.com/docs/en/desktop-quickstart" target="_blank" rel="noopener">デスクトップアプリ</a> 版でも同じことができます。</p></div>
+  <div class="tipbox" data-tool="ag"><p>ターミナルが苦手な人は、画面で操作できる <a href="https://antigravity.google/download" target="_blank" rel="noopener">Antigravity のアプリ</a> 版もあります。このガイドは CLI（ターミナル版）の手順で説明します。</p></div>
 
-  <div class="os" data-os>
+  <div class="os">
     <button data-os-k="mac" class="on">Mac</button>
     <button data-os-k="win">Windows</button>
   </div>
@@ -202,13 +261,16 @@ details[open] summary{margin-bottom:6px}
   <div class="step">
     <h3>② インストールして確認する</h3>
     <div class="ospane on" data-os-p="mac">
-      <div class="code"><div class="lb">ターミナルに貼り付けて Enter<button class="copy">コピー</button></div><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
+      <div class="code" data-tool="cc"><div class="lb">ターミナルに貼り付けて Enter<button class="copy">コピー</button></div><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
+      <div class="code" data-tool="ag"><div class="lb">ターミナルに貼り付けて Enter<button class="copy">コピー</button></div><pre>curl -fsSL https://antigravity.google/cli/install.sh | bash</pre></div>
     </div>
     <div class="ospane" data-os-p="win">
-      <div class="code"><div class="lb">PowerShell に貼り付けて Enter<button class="copy">コピー</button></div><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
+      <div class="code" data-tool="cc"><div class="lb">PowerShell に貼り付けて Enter<button class="copy">コピー</button></div><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
+      <div class="code" data-tool="ag"><div class="lb">PowerShell に貼り付けて Enter<button class="copy">コピー</button></div><pre>irm https://antigravity.google/cli/install.ps1 | iex</pre></div>
     </div>
-    <p>途中経過は表示されません。終わったら<b>ターミナルを一度閉じて開き直し</b>、次のコマンドでバージョン番号が出れば成功です。</p>
-    <div class="code"><div class="lb">確認<button class="copy">コピー</button></div><pre>claude --version</pre></div>
+    <p>終わったら<b>ターミナルを一度閉じて開き直し</b>、次のコマンドでバージョン番号が出れば成功です。</p>
+    <div class="code" data-tool="cc"><div class="lb">確認<button class="copy">コピー</button></div><pre>claude --version</pre></div>
+    <div class="code" data-tool="ag"><div class="lb">確認<button class="copy">コピー</button></div><pre>agy --version</pre></div>
     <ul class="check" data-group="setup"><li><label><input type="checkbox" data-k="setup-1"><span><b>バージョン番号が表示された</b><small>「見つからない」と出たら <a href="#s7">7. 困ったときは</a> へ</small></span></label></li></ul>
   </div>
 
@@ -218,39 +280,52 @@ details[open] summary{margin-bottom:6px}
       <div class="code"><div class="lb">ターミナル<button class="copy">コピー</button></div><pre>mkdir -p ~/ai-practice/team-todo
 cd ~/ai-practice/team-todo
 git init
-claude</pre></div>
+<span data-tool="cc">claude</span><span data-tool="ag">agy</span></pre></div>
       <p class="small"><code class="i">git</code> が無いと表示されたら、画面の案内に従って開発者ツールをインストールしてから、もう一度実行します。</p>
     </div>
     <div class="ospane" data-os-p="win">
       <div class="code"><div class="lb">PowerShell<button class="copy">コピー</button></div><pre>mkdir $HOME\ai-practice\team-todo
 cd $HOME\ai-practice\team-todo
 git init
-claude</pre></div>
+<span data-tool="cc">claude</span><span data-tool="ag">agy</span></pre></div>
       <p class="small"><code class="i">git</code> が見つからないと表示されたら、Git for Windows を入れてからターミナルを開き直します。</p>
     </div>
-    <p>初回はブラウザが開くので、<b>個人のアカウント</b>でログインします。「このフォルダを信頼しますか」と聞かれたら、練習用フォルダであることを確かめてから許可します。</p>
+    <p>初回はブラウザが開くので、<b>個人の<span data-tool="cc">アカウント</span><span data-tool="ag">Googleアカウント</span></b>でログインします。フォルダを信頼するか聞かれたら、練習用フォルダであることを確かめてから許可します。</p>
     <ul class="check" data-group="setup"><li><label><input type="checkbox" data-k="setup-2"><span><b>ログインでき、入力欄が表示された</b></span></label></li></ul>
   </div>
 
   <div class="step">
     <h3>④ 最初の一言を送る</h3>
-    <div class="code prompt"><div class="lb">Claude Code に送る<button class="copy">コピー</button></div><pre>こんにちは。このフォルダは練習用の空のプロジェクトです。これから一緒にTODOアプリを作ります。返答と作る文書は日本語でお願いします。</pre></div>
+    <div class="code prompt"><div class="lb">AIに送る<button class="copy">コピー</button></div><pre>こんにちは。このフォルダは練習用の空のプロジェクトです。これから一緒にTODOアプリを作ります。返答と作る文書は日本語でお願いします。</pre></div>
     <ul class="check" data-group="setup"><li><label><input type="checkbox" data-k="setup-3"><span><b>日本語で返事が来た</b></span></label></li></ul>
   </div>
 
   <h3>覚えておく操作</h3>
-  <table class="t">
-    <tr><th style="width:34%">操作</th><th>内容</th></tr>
+  <table class="t" data-tool="cc">
+    <tr><th style="width:36%">操作</th><th>内容</th></tr>
     <tr><td><kbd>Esc</kbd></td><td>AIの作業をその場で止める</td></tr>
     <tr><td><kbd>Shift</kbd>+<kbd>Tab</kbd>（数回）</td><td>モードの切り替え。画面下に <code class="i">⏸ plan mode on</code> と出れば Plan mode</td></tr>
     <tr><td><code class="i">/rewind</code> または <kbd>Esc</kbd> 2回（入力欄が空のとき）</td><td>前の状態に巻き戻す（AIが編集したファイルと会話）</td></tr>
     <tr><td><code class="i">/exit</code></td><td>終了。<code class="i">claude --continue</code> で続きから再開できる</td></tr>
   </table>
+  <table class="t" data-tool="ag">
+    <tr><th style="width:36%">操作</th><th>内容</th></tr>
+    <tr><td><kbd>Esc</kbd></td><td>AIの作業をその場で止める</td></tr>
+    <tr><td><kbd>Shift</kbd>+<kbd>Tab</kbd>（数回）</td><td>モードの切り替え（default → accept-edits → auto → plan）。<b>普段は default のまま</b>使う</td></tr>
+    <tr><td><code class="i">/plan</code> 指示文</td><td>そのメッセージだけ Plan mode で送る</td></tr>
+    <tr><td><code class="i">/rewind</code></td><td>会話を前のメッセージまで巻き戻す。<b>ファイルの変更は戻らない</b>ので、こまめにコミットしておく</td></tr>
+    <tr><td><code class="i">/usage</code></td><td>無料枠の残り（利用量）を確認する</td></tr>
+    <tr><td><code class="i">/exit</code></td><td>終了。<code class="i">agy --continue</code> で続きから再開できる</td></tr>
+  </table>
+  <div class="tipbox" data-tool="ag"><p>default モードでは、AIがファイルを作成・変更する前に<b>変更内容（差分）を見せて許可を求めます</b>。毎回確認できるので、練習にはこのモードが最適です。</p></div>
+  </div>
 </section>
 
 <!-- 4 -->
 <section class="card" id="s4">
-  <h2><span class="no">4</span>ハンズオン：TODOアプリを作る <span class="tag paid">A コース</span><span class="prog" data-prog="hands"></span></h2>
+  <h2><span class="no">4</span>ハンズオン：TODOアプリを作る<span class="prog" data-prog="hands"></span></h2>
+  <div data-tool="chat" class="skipnote">C コースは <a href="#s6">6. チャットだけで試すコース</a> へ進んでください。</div>
+  <div data-tool="cc ag">
   <p class="lead">デモと同じ流れです。各ステップで<b>指示文をコピーして送り</b>、<b>レビューのチェック</b>を付けてから次へ進みます。デモと違い、AIの返事は毎回変わります。</p>
   <div class="tipbox"><p>💡 各ステップの終わりに「<b>ここまでの変更をコミットして</b>」と頼んでおくと、失敗しても戻せます。</p></div>
 
@@ -271,8 +346,9 @@ claude</pre></div>
 
   <div class="step">
     <h3><span class="ph">STEP 2</span>実装計画 <span class="tag">Plan mode</span> <span class="demo">（デモのフェーズ1の最後）</span></h3>
-    <p><kbd>Shift</kbd>+<kbd>Tab</kbd> を何回か押し、画面下に <code class="i">⏸ plan mode on</code> と出たら、次の指示を送ります。この間、AIはファイルを変更しません。</p>
-    <div class="code prompt"><div class="lb">指示文（Plan mode で送る）<button class="copy">コピー</button></div><pre>docs/requirements.md をもとに実装計画を立ててください。
+    <p data-tool="cc"><kbd>Shift</kbd>+<kbd>Tab</kbd> を何回か押し、画面下に <code class="i">⏸ plan mode on</code> と出たら、次の指示を送ります。この間、AIはファイルを変更しません。</p>
+    <p data-tool="ag">指示文の先頭に <code class="i">/plan</code> を付けて送ります（下の指示文には付けてあります）。AIはファイルを読むだけで、<b>実装計画</b>を出して承認を待ちます。</p>
+    <div class="code prompt"><div class="lb">指示文<button class="copy">コピー</button></div><pre><span data-tool="ag">/plan </span>docs/requirements.md をもとに実装計画を立ててください。
 ・HTML / CSS / JavaScript だけで作る（ライブラリ不要、index.html をダブルクリックで開ける形）
 ・作業を2つに分け、サブエージェント2体で並列に実装する前提にする
 ・並列化の前に決める共通ルール（データの形・一覧の並び順・どのファイルを誰が担当するか）も計画に含める</pre></div>
@@ -285,11 +361,13 @@ claude</pre></div>
 
   <div class="step">
     <h3><span class="ph">STEP 3</span>並列実装 <span class="tag">SubAgent</span> <span class="demo">（デモのフェーズ2・3）</span></h3>
-    <p>計画を承認したら、次の指示を送ります（Plan mode が解除されていなければ <kbd>Shift</kbd>+<kbd>Tab</kbd> で戻します）。</p>
+    <p data-tool="cc">計画を承認したら、次の指示を送ります（Plan mode が解除されていなければ <kbd>Shift</kbd>+<kbd>Tab</kbd> で戻します）。</p>
+    <p data-tool="ag">計画を承認したら、次の指示を送ります（<code class="i">/plan</code> は付けません）。作業中に <code class="i">/agents</code> と入力すると、動いているサブエージェントの一覧と進み具合を見られます。</p>
     <div class="code prompt"><div class="lb">指示文<button class="copy">コピー</button></div><pre>計画どおり実装してください。
 最初に共通ルールを docs/conventions.md に書き、それを渡したうえで、サブエージェント2体で並列に作業してください。
 終わったら、レビューしてほしい観点（AIが仮定した点・確認してほしい点）を一覧で示してください。</pre></div>
     <p>できあがった <code class="i">index.html</code> をブラウザで開いて、実際に触ってみましょう（フォルダを開いてダブルクリック）。</p>
+    <p class="small" data-tool="ag">サブエージェントを使うかどうかはAIが判断するため、1体で作業することもあります。その場合も、レビューの観点は同じです。</p>
     <ul class="check" data-group="hands">
       <li><label><input type="checkbox" data-k="h3-1"><span><b>アプリを開いて、追加・完了・削除を試した</b></span></label></li>
       <li><label><input type="checkbox" data-k="h3-2"><span><b>AIが出したレビュー観点を、1つずつ確認した</b></span></label></li>
@@ -333,33 +411,38 @@ claude</pre></div>
     </ul>
   </div>
   <div class="okbox"><p>🎉 お疲れさまでした！ ここまでで、デモと同じ流れを<b>本物のAI</b>で一通り回せました。</p></div>
+  </div>
 </section>
 
 <!-- 5 -->
 <section class="card" id="s5">
-  <h2><span class="no">5</span>Skill を作って使い回す <span class="tag">Skill</span> <span class="tag paid">A コース</span><span class="prog" data-prog="skill"></span></h2>
+  <h2><span class="no">5</span>Skill を作って使い回す <span class="tag">Skill</span><span class="prog" data-prog="skill"></span></h2>
+  <div data-tool="chat" class="skipnote">C コースでは使いません。A / B コースで試せます。</div>
+  <div data-tool="cc ag">
   <p class="lead">ハンズオン中に何度も出てきた「レビュー依頼」を、<b>Skill</b>（AIが必要なときに読み込む手順書）にして、毎回同じ型で出してもらえるようにします。</p>
   <div class="step">
     <h3>① Skill のファイルを置く</h3>
     <p>下の <a href="#s8">スターターキット</a> から <code class="i">SKILL.md</code> をダウンロードし、練習用フォルダの中の次の場所に置きます（フォルダが無ければ作ります）。</p>
-    <div class="code"><div class="lb">置き場所</div><pre>team-todo/.claude/skills/review-request/SKILL.md</pre></div>
-    <p class="small">ファイルを置くのもAIに頼めます：「.claude/skills/review-request/SKILL.md を作って、次の内容を書いて」と頼み、内容を貼り付けます。</p>
+    <div class="code"><div class="lb">置き場所</div><pre>team-todo/<span data-tool="cc">.claude/skills</span><span data-tool="ag">.agents/skills</span>/review-request/SKILL.md</pre></div>
+    <p class="small">ファイルを置くのもAIに頼めます：「<span data-tool="cc">.claude/skills</span><span data-tool="ag">.agents/skills</span>/review-request/SKILL.md を作って、次の内容を書いて」と頼み、内容を貼り付けます。</p>
   </div>
   <div class="step">
     <h3>② 呼び出す</h3>
-    <p>Claude Code を一度終了（<code class="i">/exit</code>）して起動し直し、入力欄に次のように入力します。</p>
+    <p data-tool="cc">Claude Code を一度終了（<code class="i">/exit</code>）して起動し直し、入力欄に次のように入力します。</p>
+    <p data-tool="ag"><code class="i">/skills reload</code> を実行して Skill を読み込み直してから、入力欄に次のように入力します。</p>
     <div class="code prompt"><div class="lb">入力<button class="copy">コピー</button></div><pre>/review-request docs/test-spec.md</pre></div>
     <ul class="check" data-group="skill">
       <li><label><input type="checkbox" data-k="sk-1"><span><b>「仮定した点・抜け漏れ・判断できない点・確認方法」の型でレビュー依頼が出た</b></span></label></li>
       <li><label><input type="checkbox" data-k="sk-2"><span><b>自分が普段確認したい観点を SKILL.md に書き足してみた</b><small>チームで共有すれば、誰がレビューしても同じ観点で見られる</small></span></label></li>
     </ul>
   </div>
+  </div>
 </section>
 
 <!-- 6 -->
 <section class="card" id="s6">
-  <h2><span class="no">6</span>無料で試すコース <span class="tag free">B コース</span><span class="prog" data-prog="free"></span></h2>
-  <p class="lead">インストールせず、ブラウザで <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> に個人のアカウントでログインして試します。「書く作業をAIに任せて、人間がレビューする」部分を体験できます。</p>
+  <h2><span class="no">6</span>チャットだけで試すコース <span class="tag free">C コース</span><span class="prog" data-prog="free"></span></h2>
+  <p class="lead">インストールせず、ブラウザで <a href="https://claude.ai" target="_blank" rel="noopener">Claude（claude.ai）</a> または <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini（gemini.google.com）</a> に個人のアカウントでログインして試します。「書く作業をAIに任せて、人間がレビューする」部分を体験できます。A / B コースの人も、ツールを入れる前の練習に使えます。</p>
 
   <div class="step">
     <h3><span class="ph">STEP 1</span>要件定義書を作ってもらう</h3>
@@ -396,35 +479,41 @@ claude</pre></div>
 <!-- 7 -->
 <section class="card" id="s7">
   <h2><span class="no">7</span>困ったときは</h2>
-  <details><summary>claude --version で「見つからない」「認識されません」と出る</summary>
-    <p>インストール直後は、<b>ターミナルを閉じて開き直す</b>と直ることがほとんどです。直らない場合は <a href="https://code.claude.com/docs/en/troubleshoot-install" target="_blank" rel="noopener">公式のトラブルシューティング</a> を確認してください。</p>
+  <details data-tool="cc ag"><summary><span data-tool="cc">claude</span><span data-tool="ag">agy</span> --version で「見つからない」「認識されません」と出る</summary>
+    <p>インストール直後は、<b>ターミナルを閉じて開き直す</b>と直ることがほとんどです。直らない場合は公式のトラブルシューティング（<span data-tool="cc"><a href="https://code.claude.com/docs/en/troubleshoot-install" target="_blank" rel="noopener">Claude Code</a></span><span data-tool="ag"><a href="https://antigravity.google/docs/cli/troubleshooting" target="_blank" rel="noopener">Antigravity CLI</a></span>）を確認してください。</p>
     <p>Windows で <code class="i">'irm' is not recognized</code> と出たら CMD を開いています。PowerShell を開き直してください。</p></details>
-  <details><summary>ログインで「このプランでは使えない」と言われる</summary>
-    <p>Claude Code は無料プランでは使えません。B コース（<a href="#s6">6</a>）で試すか、プランを確認してください。</p></details>
-  <details><summary>AIが質問せずに作り始めた／思っていたのと違う方向に進んでいる</summary>
+  <details data-tool="cc"><summary>ログインで「このプランでは使えない」と言われる</summary>
+    <p>Claude Code は無料プランでは使えません。B コース（Antigravity CLI）か C コース（チャットだけ）で試してください。</p></details>
+  <details data-tool="ag"><summary>「Gemini CLI」の手順を見つけたけど、そちらではだめ？</summary>
+    <p>個人の無料利用は 2026年6月18日に終了しています。無料で試すなら Antigravity CLI（<code class="i">agy</code>）を使ってください。古い記事の <code class="i">gemini</code> コマンドの手順は、そのままでは使えません。</p></details>
+  <details data-tool="cc ag"><summary>AIが質問せずに作り始めた／思っていたのと違う方向に進んでいる</summary>
     <p><kbd>Esc</kbd> で止めて、「いったん止めて。作る前に、不明点を質問してください」と伝えます。大きな作業は Plan mode で計画から始めると防げます。</p></details>
-  <details><summary>やり直したい・元に戻したい</summary>
-    <p><code class="i">/rewind</code>（または入力欄が空のときに <kbd>Esc</kbd> 2回）で、指示を送る前の状態に戻せます。ただし、コマンドで変更されたファイルや SubAgent の変更は戻せないことがあるので、区切りごとに「コミットして」と頼んでおくのが安全です。</p></details>
-  <details><summary>英語で返事が来る</summary>
-    <p>「日本語で答えてください」と伝えます。毎回伝えるのが面倒なら、スターターキットの <code class="i">CLAUDE.md</code> をフォルダに置くと、プロジェクトのルールとして読み込まれます。</p></details>
-  <details><summary>「利用上限に達しました」と出た</summary>
-    <p>プランごとに一定時間あたりの利用量に上限があります。表示された時間まで待つと再開できます。</p></details>
-  <details><summary>許可を求められたけど、何をするのか分からない</summary>
+  <details data-tool="cc ag"><summary>やり直したい・元に戻したい</summary>
+    <p data-tool="cc"><code class="i">/rewind</code>（または入力欄が空のときに <kbd>Esc</kbd> 2回）で、指示を送る前の状態に戻せます。ただし、コマンドで変更されたファイルや SubAgent の変更は戻せないことがあるので、区切りごとに「コミットして」と頼んでおくのが安全です。</p>
+    <p data-tool="ag"><code class="i">/rewind</code> で戻せるのは<b>会話だけ</b>で、ファイルの変更は戻りません。区切りごとに「ここまでの変更をコミットして」と頼んでおき、戻したいときは「前のコミットの状態に戻して」と頼みます。default モードなら、ファイルを変更する前に差分を見て断ることもできます。</p></details>
+  <details data-tool="cc ag chat"><summary>英語で返事が来る</summary>
+    <p>「日本語で答えてください」と伝えます。<span data-tool="cc ag">毎回伝えるのが面倒なら、スターターキットの <code class="i" data-tool="cc">CLAUDE.md</code><code class="i" data-tool="ag">AGENTS.md</code> をフォルダに置くと、プロジェクトのルールとして読み込まれます。</span></p></details>
+  <details data-tool="cc ag chat"><summary>「利用上限に達しました」と出た</summary>
+    <p data-tool="cc">プランごとに一定時間あたりの利用量に上限があります。表示された時間まで待つと再開できます。</p>
+    <p data-tool="ag">無料プランは<b>週ごと</b>に上限が決まっています。<code class="i">/usage</code> で使用量を確認できます。上限に達したら翌週まで待ちましょう。長い会話ほど多く消費するので、ステップごとに新しい会話（<code class="i">/clear</code>）にすると長持ちします。</p>
+    <p data-tool="chat">無料プランは一定時間あたりの回数に上限があります。時間をおくと再開できます。</p></details>
+  <details data-tool="cc ag"><summary>許可を求められたけど、何をするのか分からない</summary>
     <p>許可せずに「このコマンドは何をするものですか？」と質問してください。分からないまま許可しないことが、いちばんの安全策です。</p></details>
-  <details><summary>練習が終わったら？</summary>
-    <p>練習用フォルダは消して構いません。続けない場合は、プランの更新日までに解約を忘れずに。アンインストール方法は <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">公式ドキュメント</a> の「Uninstall」にあります。</p></details>
+  <details data-tool="cc ag chat"><summary>練習が終わったら？</summary>
+    <p>練習用フォルダは消して構いません。<span data-tool="cc">続けない場合は、プランの更新日までに解約を忘れずに。アンインストール方法は <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">公式ドキュメント</a> の「Uninstall」にあります。</span><span data-tool="ag">ログイン情報を消すときは <code class="i">/logout</code> を実行します。</span></p></details>
 </section>
 
 <!-- 8 -->
 <section class="card" id="s8">
   <h2><span class="no">8</span>スターターキット（ダウンロード）</h2>
+  <div data-tool="chat" class="skipnote">C コースでは使いません。チャットに貼り付けて「このルールで進めて」と伝える使い方はできます。</div>
   <p class="lead">練習用フォルダに置くと、デモで学んだ「型」をすぐ使えます。中身はダウンロード前に「中身を見る」で確認できます。</p>
   <div class="dl">
-    <div class="f"><b>CLAUDE.md</b><span>プロジェクトのルール。フォルダの一番上に置くと、AIが毎回読み込む</span><button class="btn" data-dl="claude">ダウンロード</button></div>
+    <div class="f"><b><span data-tool="cc chat">CLAUDE.md</span><span data-tool="ag">AGENTS.md</span></b><span>プロジェクトのルール。フォルダの一番上に置くと、AIが毎回読み込む</span><button class="btn" data-dl="rules">ダウンロード</button></div>
     <div class="f"><b>docs/conventions.md</b><span>並列化の前に決める共通ルールのひな形</span><button class="btn" data-dl="conv">ダウンロード</button></div>
-    <div class="f"><b>SKILL.md</b><span>レビュー依頼の Skill。<code class="i">.claude/skills/review-request/</code> に置く</span><button class="btn" data-dl="skill">ダウンロード</button></div>
+    <div class="f"><b>SKILL.md</b><span>レビュー依頼の Skill。<code class="i"><span data-tool="cc chat">.claude</span><span data-tool="ag">.agents</span>/skills/review-request/</code> に置く</span><button class="btn" data-dl="skill">ダウンロード</button></div>
   </div>
-  <details><summary>中身を見る：CLAUDE.md</summary><div class="code"><pre data-src="claude"></pre></div></details>
+  <details><summary>中身を見る：<span data-tool="cc chat">CLAUDE.md</span><span data-tool="ag">AGENTS.md</span></summary><div class="code"><pre data-src="rules"></pre></div></details>
   <details><summary>中身を見る：docs/conventions.md</summary><div class="code"><pre data-src="conv"></pre></div></details>
   <details><summary>中身を見る：SKILL.md</summary><div class="code"><pre data-src="skill"></pre></div></details>
 </section>
@@ -434,14 +523,14 @@ claude</pre></div>
   <button class="btn sub" id="printBottom">🖨 印刷・PDF保存</button>
   <button class="btn sub" id="resetChecks">チェックをすべて外す</button>
 </div>
-<p class="small" style="text-align:center;margin-top:14px">操作方法・料金・対応環境は変わることがあります。最新の情報は公式ドキュメントで確認してください。</p>
+<p class="small" style="text-align:center;margin-top:14px">操作方法・料金・無料枠・対応環境は変わることがあります（2026年11月時点の情報）。最新の情報は各公式ドキュメントで確認してください。</p>
 
 </div>
 
 <script>
 'use strict';
 const FILES = {
-  claude: { name: 'CLAUDE.md', text: `# プロジェクトのルール
+  rules: { name: { cc: 'CLAUDE.md', ag: 'AGENTS.md', chat: 'CLAUDE.md' }, text: `# プロジェクトのルール
 
 このフォルダは AI駆動開発の練習用プロジェクト（チームTODOアプリ）です。
 
@@ -486,10 +575,10 @@ const FILES = {
 ` },
   skill: { name: 'SKILL.md', text: `---
 name: review-request
-description: 成果物（要件定義書・コード・テスト仕様書・修正差分）を作成・変更したあとに、人間向けのレビュー依頼を作る
+description: 成果物（要件定義書・コード・テスト仕様書・修正差分）を作成・変更したあとに、人間向けのレビュー依頼を作る。レビュー依頼や確認観点を求められたときに使う
 ---
 
-$ARGUMENTS（指定がなければ、直前に作成・変更した成果物）について、次の型でレビュー依頼を書いてください。
+ユーザーが指定したファイル（指定がなければ、直前に作成・変更した成果物）について、次の型でレビュー依頼を書いてください。
 
 ## ⚠️ AIが仮定で決めた点
 指示になかったのに自分で決めたことを、理由とともにすべて挙げる。
@@ -506,19 +595,47 @@ $ARGUMENTS（指定がなければ、直前に作成・変更した成果物）�
 各項目は「何を」「なぜ確認が必要か」を1行ずつで書く。最後に、確認項目の数を書く。
 ` },
 };
+const fname = (k) => { const n = FILES[k].name; return typeof n === 'string' ? n : n[cur]; };
+
+/* ストレージ（使えない環境でも動くように） */
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* noop */ } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* noop */ } },
+};
+
+/* ツール（コース）切り替え */
+const TOOLS = ['cc', 'ag', 'chat'];
+let cur = 'cc';
+function setTool(t) {
+  if (!TOOLS.includes(t)) return;
+  cur = t;
+  document.body.dataset.cur = t;
+  document.querySelectorAll('#toolSeg button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+  document.querySelectorAll('.course').forEach((c) => c.classList.toggle('on', c.dataset.pick === t));
+  store.set('add-start.tool', t);
+  updateProg();
+}
+document.querySelectorAll('#toolSeg button').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.t)));
+document.querySelectorAll('.course').forEach((c) => c.addEventListener('click', (e) => { if (!e.target.closest('a')) setTool(c.dataset.pick); }));
 
 /* ファイルの中身表示・ダウンロード */
 document.querySelectorAll('pre[data-src]').forEach((p) => { p.textContent = FILES[p.dataset.src].text; });
 document.querySelectorAll('[data-dl]').forEach((b) => b.addEventListener('click', () => {
-  const f = FILES[b.dataset.dl];
+  const k = b.dataset.dl;
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([f.text], { type: 'text/markdown;charset=utf-8' }));
-  a.download = f.name;
+  a.href = URL.createObjectURL(new Blob([FILES[k].text], { type: 'text/markdown;charset=utf-8' }));
+  a.download = fname(k);
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }));
 
-/* コピー */
+/* コピー（表示中の部分だけをコピーする） */
+function visibleText(el) {
+  const c = el.cloneNode(true);
+  c.querySelectorAll('[data-tool]').forEach((n) => { if (!n.dataset.tool.split(' ').includes(cur)) n.remove(); });
+  return c.textContent;
+}
 function copyText(text) {
   if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
   return new Promise((res, rej) => {
@@ -530,8 +647,7 @@ function copyText(text) {
   });
 }
 document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', () => {
-  const pre = b.closest('.code').querySelector('pre');
-  copyText(pre.textContent).then(() => {
+  copyText(visibleText(b.closest('.code').querySelector('pre'))).then(() => {
     b.textContent = '✓ コピーしました'; b.classList.add('done');
     setTimeout(() => { b.textContent = 'コピー'; b.classList.remove('done'); }, 1600);
   }).catch(() => { b.textContent = '選択してコピーしてください'; });
@@ -541,23 +657,27 @@ document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', ()
 function setOs(k) {
   document.querySelectorAll('[data-os-k]').forEach((b) => b.classList.toggle('on', b.dataset.osK === k));
   document.querySelectorAll('[data-os-p]').forEach((p) => p.classList.toggle('on', p.dataset.osP === k));
-  try { localStorage.setItem('add-start.os', k); } catch (e) { /* noop */ }
+  store.set('add-start.os', k);
 }
 document.querySelectorAll('[data-os-k]').forEach((b) => b.addEventListener('click', () => setOs(b.dataset.osK)));
-let os = null;
-try { os = localStorage.getItem('add-start.os'); } catch (e) { /* noop */ }
-if (!os) os = /Win/i.test(navigator.platform || navigator.userAgent) ? 'win' : 'mac';
-setOs(os);
+setOs(store.get('add-start.os') || (/Win/i.test(navigator.platform || navigator.userAgent) ? 'win' : 'mac'));
 
-/* チェックリストの保存・進捗 */
+/* チェックリストの保存・進捗（表示中の項目だけを数える） */
 const KEY = 'add-start.checks';
 let saved = {};
-try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+try { saved = JSON.parse(store.get(KEY) || '{}') || {}; } catch (e) { saved = {}; }
 const boxes = [...document.querySelectorAll('ul.check input[data-k]')];
+function shown(el) {
+  for (let n = el; n && n !== document.body; n = n.parentElement) {
+    if (n.dataset && n.dataset.tool && !n.dataset.tool.split(' ').includes(cur)) return false;
+  }
+  return true;
+}
 function updateProg() {
   document.querySelectorAll('[data-prog]').forEach((el) => {
     const g = el.dataset.prog;
-    const bs = boxes.filter((b) => b.closest('ul.check').dataset.group === g);
+    const bs = boxes.filter((b) => b.closest('ul.check').dataset.group === g && shown(b));
+    el.style.display = bs.length ? '' : 'none';
     const n = bs.filter((b) => b.checked).length;
     el.textContent = n === bs.length ? '✓ 完了' : n + ' / ' + bs.length;
     el.classList.toggle('full', n === bs.length);
@@ -567,18 +687,22 @@ boxes.forEach((b) => {
   b.checked = !!saved[b.dataset.k];
   b.addEventListener('change', () => {
     saved[b.dataset.k] = b.checked;
-    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* noop */ }
+    store.set(KEY, JSON.stringify(saved));
     updateProg();
   });
 });
-updateProg();
 document.getElementById('resetChecks').addEventListener('click', () => {
   boxes.forEach((b) => { b.checked = false; });
   saved = {};
-  try { localStorage.removeItem(KEY); } catch (e) { /* noop */ }
+  store.del(KEY);
   updateProg();
 });
 ['printTop', 'printBottom'].forEach((id) => document.getElementById(id).addEventListener('click', (e) => { e.preventDefault(); window.print(); }));
+
+/* 初期表示：URLの ?tool=ag などを優先 */
+let init = null;
+try { init = new URLSearchParams(location.search).get('tool'); } catch (e) { /* noop */ }
+setTool(TOOLS.includes(init) ? init : (store.get('add-start.tool') || 'cc'));
 </script>
 </body>
 </html>
